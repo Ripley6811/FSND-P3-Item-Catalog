@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container" style="margin-top:50px">
+    <div>
+        <h1 data-bind="text: current_restaurant.name"></h1>
+        <h3>Enter a new restaurant below.</h3>
+        <div data-bind="with: current_restaurant">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" data-bind="textInput: name">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" class="form-control" data-bind="textInput: phone">
+            </div>
+            <div class="form-group">
+                <label>Note</label>
+                <input type="text" class="form-control" data-bind="textInput: note">
+            </div>
+        </div>
+        <br>
+        <button type="button" class="btn btn-success text-uppercase" data-bind="click: save">Save new restaurant</button>
+        <a class="btn btn-danger text-uppercase" href="{{ url_for('restaurants') }}">Cancel new restaurant</a>
+    </div>
+</div>
+
+<script>
+var view_model = view_model || {};
+
+/**
+ * KO observable model for new item.
+ */
+view_model.current_restaurant = {
+    name: ko.observable(),
+    phone: ko.observable(),
+    note: ko.observable(),
+};
+
+/**
+ * Send an AJAX request for item data and add to food_list array for display.
+ */
+view_model.save = function() {
+    // Convert current_item KO model to serializable object.
+    var params = ko.toJS(view_model.current_restaurant); 
+    post('/save/restaurant', params, function(response) {
+        // Go to restaurant menu view if successful.
+        if (response.status == 200) {
+            window.location = '/menu/' + response.id + '/';
+        } else {
+            console.log(response.status);
+            alert('There was a problem saving the new restaurant to the database.');
+        }
+    });
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<a style="position: absolute; top: 0px" class="btn btn-lg btn-primary" href="/"><span class="glyphicon glyphicon-menu-left"></span></a>
+<div class="container" style="margin-top:25px">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Three random suggestions from your favorites</h1>
+        </div>
+        <div class="col-md-6">
+            <h1><a role="button" class="btn btn-danger" href="/random_favorites">Random Favorite!</a></h1>
+        </div>
+    </div>
+
+    <span class="label label-default">Click on row to see restaurant menu</span>
+    <table class="table table-hover table-condensed h3">
+        <tbody data-bind="foreach: items">
+            <tr data-bind="click: $parent.see_menu">
+                <td data-bind="text: $index() + 1 + ':'"></td>
+                <td>
+                    <span data-bind="text: name"></span>
+                    - <span data-bind="text: '$' + price"></span>
+                </td>
+                <td>@</td>
+                <td data-bind="text: restaurant_name"></td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+var view_model = view_model || {};
+    
+view_model.see_menu = function(item) {
+    window.location = '/menu/' + item.restaurant_id;
+};
+
+/**
+ * Send an AJAX request for list of restaurants and add to display.
+ */
+view_model.get_favorites = function() {
+    post('/get/favorites', {}, function(response) {
+        view_model.items.removeAll();
+        for (var i=0; i<response.items.length; i++) {
+            view_model.items.push(response.items[i]);
+        }
+    });
+}
+view_model.items = ko.observableArray();
+view_model.get_favorites();
+</script>
+{% endblock %}

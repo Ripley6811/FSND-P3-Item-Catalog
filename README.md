@@ -3,6 +3,16 @@ rdb-fullstack
 
 Fullstack project built with Flask and a PostgreSQL database on a virtual machine.
 
+## TODO
+- Add editing for restaurants and menu-items
+- Add OAuth functionality
+- Add JSON endpoints
+
+## Required packages
+- [**Flask**](http://flask.pocoo.org/) - Python web framework
+- [**SQLAlchemy**](http://www.sqlalchemy.org/) - Python SQL Toolkit and ORM
+- [**Psycopg**](http://initd.org/psycopg/) - PostgreSQL adapter for Python
+
 
 ## Instructions
 1. **Virtual Machine setup:** 
@@ -23,7 +33,7 @@ database, tables and views. Run this file within the VM:
 You should see the database setup commands *echo* to the command terminal without
 error. The default is you add a postgresql database to the VM server. If you want
 to use local directory database with the sqlite dbapi, then change **`use_postgresql`**
-to **`False`** inside the *database_setup.py* file
+to **`False`** inside the *database_setup.py* file before running all files.
 
 4. **Add filler data:**
 Preset data can be added to the database by following the setup with running
@@ -57,7 +67,20 @@ is running.
 ***Stackoverflow.com***
 [Create database programmatically](http://stackoverflow.com/questions/6506578/how-to-create-a-new-database-using-sqlalchemy)
 [Delete file if exists with Python](http://stackoverflow.com/questions/10840533/most-pythonic-way-to-delete-a-file-which-may-not-exist)
+[Select a few from list](http://stackoverflow.com/questions/1262955/how-do-i-pick-2-random-items-from-a-python-set)
+[Need to flush() to get new record id](http://stackoverflow.com/questions/620610/sqlalchemy-obtain-primary-key-with-autoincrement-before-commit)
 
 
 ***SQLAlchemy.org**
 [Connecting and using PostgreSQL](http://docs.sqlalchemy.org/en/rel_1_0/dialects/postgresql.html?highlight=postgresql#dialect-postgresql)
+
+
+***Jinja.pocoo.org***
+[How to use templates](http://jinja.pocoo.org/docs/dev/templates/)
+
+
+***Knockoutjs.com***
+[Has-focus option](http://knockoutjs.com/documentation/hasfocus-binding.html)
+[Show item index in foreach loop](http://knockoutjs.com/documentation/foreach-binding.html)
+
+
