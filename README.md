@@ -7,6 +7,7 @@ Fullstack project built with Flask and a PostgreSQL database on a virtual machin
 - Add editing for restaurants and menu-items
 - Add OAuth functionality
 - Add JSON endpoints
+- Add browser instructions
 
 ## Required packages
 - [**Flask**](http://flask.pocoo.org/) - Python web framework
@@ -69,6 +70,8 @@ is running.
 [Delete file if exists with Python](http://stackoverflow.com/questions/10840533/most-pythonic-way-to-delete-a-file-which-may-not-exist)
 [Select a few from list](http://stackoverflow.com/questions/1262955/how-do-i-pick-2-random-items-from-a-python-set)
 [Need to flush() to get new record id](http://stackoverflow.com/questions/620610/sqlalchemy-obtain-primary-key-with-autoincrement-before-commit)
+[Credentials not serializable error fix](http://stackoverflow.com/questions/22915461/google-login-server-side-flow-storing-credentials-python-examples/22930708#22930708)
+
 
 
 ***SQLAlchemy.org**
@@ -82,5 +85,9 @@ is running.
 ***Knockoutjs.com***
 [Has-focus option](http://knockoutjs.com/documentation/hasfocus-binding.html)
 [Show item index in foreach loop](http://knockoutjs.com/documentation/foreach-binding.html)
+
+
+***Developers.google.com***
+[Add sign-in button](https://developers.google.com/+/web/signin/add-button)
 
 

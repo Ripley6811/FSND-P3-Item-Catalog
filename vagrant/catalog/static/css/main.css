@@ -2,3 +2,29 @@
 
 
 
+
+#signinButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+#back-btn {
+    position: absolute; 
+    top: 5px;
+    left: 5px;
+}
+
+#user-img {
+    width: 40px; 
+    height: 40px;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+}
+
+#signoutButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
