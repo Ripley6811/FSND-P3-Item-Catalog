@@ -6,6 +6,7 @@ Fullstack project built with Flask and a PostgreSQL database on a virtual machin
 ## TODO
 - Add editing for restaurants and menu-items
 - Add OAuth functionality
+    - Check login state before CRUD operations
 - Add JSON endpoints
 - Add browser instructions
 

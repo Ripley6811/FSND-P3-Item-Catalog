@@ -240,8 +240,7 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
     
-    flash("you are now logged in as %s" % login_session['username'])
-    print "done!"
+    flash("you are now logged in as {}".format(login_session['username']))
     return jsonify(status=200, username=data['name'], picture=data['picture'])
 
 
