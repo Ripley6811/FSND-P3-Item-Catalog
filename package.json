@@ -1,0 +1,28 @@
+{
+  "name": "FSND-P3-Item-Catalog",
+  "version": "1.0.0",
+  "description": "Restaurant menu database exercise using the Flask microframework and Knockout.js with a PostgreSQL VM server.",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ripley6811/FSND-P3-Item-Catalog.git"
+  },
+  "keywords": [
+    "Flask",
+    "Knockout.js"
+  ],
+  "author": "Jay W Johnson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ripley6811/FSND-P3-Item-Catalog/issues"
+  },
+  "homepage": "https://github.com/Ripley6811/FSND-P3-Item-Catalog",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-readme": "^0.4.5"
+  }
+}
