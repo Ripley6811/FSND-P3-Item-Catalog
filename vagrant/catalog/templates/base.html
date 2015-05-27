@@ -42,7 +42,7 @@
 
 <script>
 var view_model = view_model || {};
-view_model._csrf = '{{ _csrf }}';
+    
 view_model.user = {
     username: ko.observable(),
     picture: ko.observable(),
@@ -50,19 +50,22 @@ view_model.user = {
 
 view_model.logout = function() {
     post('/gdisconnect', {}, function(response) {
-        if (response.status == 200) {
+        if (response.status == 'ok') {
             view_model.user.username('');
             view_model.user.picture('');
         }
     });
 };
     
-    
 post('/get/user_info', {}, function(response) {
-    if (response) {
+    if (response.username != undefined) {
         view_model.user.username(response.username);
         view_model.user.picture(response.picture);
     }
+});
+
+post('/csrf', {}, function(response) {
+    view_model._csrf = response.csrf;
 });
 
 ko.applyBindings(view_model, document.getElementById('body'));

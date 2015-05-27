@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import json
+import pip
+#import json
 import string
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
-from database_setup import get_database_session, Restaurant, MenuItem
+import database_setup as db
+from database_setup import Restaurant, MenuItem
 from sqlalchemy.exc import IntegrityError
 from random import sample, choice
 from flask import session as login_session
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-import httplib2
+#import httplib2
 from flask import make_response
 import requests
 
@@ -17,7 +19,7 @@ app = Flask(__name__)
 
 # Get a connection session to the database.
 # See `database_setup.py` for dbapi type and db tables.
-session = get_database_session()
+session = db.get_database_session()
 
 
 ##############################################################################
@@ -25,36 +27,41 @@ session = get_database_session()
 ##############################################################################
 @app.route('/')
 def restaurants():
-    _csrf = renew_csrf();
-    return render_template('index.html', title='Restaurants', _csrf=_csrf)
-
-
-@app.route('/random_favorites')
-def random_favorites():
-    _csrf = renew_csrf();
-    return render_template('favorites.html', title='Favorites', _csrf=_csrf)
+    if 'username' not in login_session:
+        _csrf = renew_csrf();
+    return render_template('index.html', title='Restaurants')
 
 
 @app.route('/menu/<int:restaurant_id>/')
 def restaurant_view(restaurant_id):
-    _csrf = renew_csrf();
+    if 'username' not in login_session:
+        _csrf = renew_csrf();
     restaurant = session.query(Restaurant).filter_by(id = restaurant_id).first()
-    return render_template('menu.html', title='Menu', _csrf=_csrf,
+    return render_template('menu.html', title='Menu',
                            restaurant=restaurant.sdic)
 
 
 @app.route('/new/item/<int:restaurant_id>/')
 def new_item(restaurant_id):
-    _csrf = renew_csrf();
+    if 'username' not in login_session:
+        return redirect(url_for('restaurants'))
     restaurant = session.query(Restaurant).filter_by(id = restaurant_id).first()
-    return render_template('new_item.html', title='New Item', _csrf=_csrf,
+    return render_template('new_item.html', title='New Item',
                            restaurant=restaurant.sdic)
 
 
 @app.route('/new/restaurant')
 def new_restaurant():
-    _csrf = renew_csrf();
-    return render_template('new_restaurant.html', title='New Restaurant', _csrf=_csrf)
+    if 'username' not in login_session:
+        return redirect(url_for('restaurants'))
+    return render_template('new_restaurant.html', title='New Restaurant')
+
+
+@app.route('/random_favorites')
+def random_favorites():
+    if 'username' not in login_session:
+        return redirect(url_for('restaurants'))
+    return render_template('favorites.html', title='Favorites')
 
 
 ##############################################################################
@@ -177,10 +184,17 @@ def renew_csrf():
     return _csrf
 
 
+@app.route('/csrf', methods=['POST'])
+def get_csrf():
+    return jsonify(csrf=login_session['_csrf'])
+
+
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     if request.args.get('_csrf') != login_session['_csrf']:
-        return jsonify(status=401, message='Invalid state parameter')
+        res = jsonify(message='Invalid state parameter')
+        res.status_code = 401
+        return res
     
     code = request.get_json()['data']
     try:
@@ -189,41 +203,37 @@ def gconnect():
         # Exchange code for credentials object with token
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
-        return jsonify(status=401, message='Failed to upgrade authorization code')
+        res = jsonify(message='Failed to upgrade authorization code')
+        res.status_code = 401
+        return res
     
     # Check that access token is valid
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}'.format(access_token))
-    h = httplib2.Http()
-    result = json.loads(h.request(url, 'GET')[1])
+    url = 'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={}'.format(access_token)
+    result = requests.get(url).json()
     # Abort if error.
     if result.get('error') is not None:
-        response = make_response(json.dumps(result.get('error')), 500)
-        return response
+        res = jsonify(message=result.get('error'))
+        res.status_code = 500
+        return res
     
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
-        response = make_response(
-            json.dumps("Token's user ID doesn't match given user ID."), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        res = jsonify(message="Token's user ID doesn't match given user ID.")
+        res.status_code = 401
+        return res
 
     # Verify that the access token is valid for this app.
     if result['issued_to'] != '494203108202-8qijkubc2hiio08dptgb5cc21su8qf84.apps.googleusercontent.com':
-        response = make_response(
-            json.dumps("Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        res = jsonify(message="Token's client ID does not match app's.")
+        res.status_code = 401
+        return res
 
     stored_credentials = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_credentials is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify(message='Current user is already connected.')
 
     # Store the access token in the session for later use.
     login_session['access_token'] = credentials.access_token
@@ -241,33 +251,27 @@ def gconnect():
     login_session['email'] = data['email']
     
     flash("you are now logged in as {}".format(login_session['username']))
-    return jsonify(status=200, username=data['name'], picture=data['picture'])
+    return jsonify(status='ok', username=data['name'], picture=data['picture'])
 
 
 @app.route('/gdisconnect', methods=['POST'])
 def gdisconnect():
+#    login_session.clear()
     # Only disconnect a connected user.
-    access_token = login_session.get('access_token')
+    access_token = login_session.get('access_token', None)
     if access_token is None:
-        login_session.pop('access_token')
-        login_session.pop('gplus_id')
-        login_session.pop('username')
-        login_session.pop('email')
-        login_session.pop('picture')
-        return jsonify(status=401, message='Current user not connected.')
+        login_session.clear()
+        response = jsonify(message='Current user not connected.')
+        response.status_code = 401
+        return response
+    
     url = 'https://accounts.google.com/o/oauth2/revoke?token={}'.format(access_token)
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[0]
-
-    if result['status'] == '200':
+    result = requests.get(url)
+    
+    if result.status_code == 200:
         # Reset the user's sesson.
-        login_session.pop('access_token')
-        login_session.pop('gplus_id')
-        login_session.pop('username')
-        login_session.pop('email')
-        login_session.pop('picture')
-
-        return jsonify(status=200, message='Successfully disconnected.')
+        login_session.clear()
+        return jsonify(status='ok', message='Successfully disconnected.')
     else:
         # For whatever reason, the given token was invalid.
         return jsonify(status=400, message='Failed to revoke token for given user.')
@@ -280,7 +284,16 @@ def get_user_info():
                    picture=login_session.get('picture', ''))
 
 
+# From a suggestion on http://stackoverflow.com/questions/739993/how-can-i-get-a-list-of-locally-installed-python-modules
+@app.route('/environment')
+def show_environment():
+    """Returns a list of installed packages on the server environment."""
+    installed_packages = pip.get_installed_distributions()
+    installed_packages_list = sorted(["%s == %s" % (i.key, i.version)
+         for i in installed_packages])
+    return jsonify(packages=installed_packages_list)
+
+
 if __name__ == '__main__':
     app.secret_key = 'secret_key'
-    app.debug = True
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=8000, debug=True)

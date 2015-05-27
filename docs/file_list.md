@@ -12,3 +12,6 @@ and a method for getting a connection (`get_database_session()`).
 
 ***`templates/`*** - The `base.html` file contains the head and html code used by all
 other files.  Other `*.html` files are inserted as the body to the `base.html` file.
+
+***`website_mockup`*** - Sample pages from the application showing what it would
+look like with a server connection.

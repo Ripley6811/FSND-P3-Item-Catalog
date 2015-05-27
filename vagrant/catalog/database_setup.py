@@ -66,60 +66,93 @@ def to_serializable_dic(obj):
     return filtered_copy
 
 
-def get_database_session(db_echo=False):
+def get_database_session(echo=False, test=False):
     """Returns a session for executing queries.
     
     Connects to a database, creates an engine and returns a session connection
     to the engine.
     
     Args:
-        db_echo: Boolean passed to create_engine's echo arg.
+        echo: Boolean passed to create_engine's echo arg.
+        test: Boolean to use test database instead of the production one.
         
     Returns:
         A SQLAlchemy Session instance.
     """
+    db_name = database_name if not test else test_database
     if use_postgresql:
-        engine = create_engine(postgres_dbapi + database_name, echo=db_echo)
-        print('Connected to PostgreSQL: ' + database_name)
+        engine = create_engine(postgres_dbapi + db_name, echo=echo)
+        print('Connected to PostgreSQL: ' + db_name)
     else:
-        engine = create_engine(sqlite_dbapi + database_name, echo=db_echo)
-        print('Connected to SQLite: ' + database_name)
+        engine = create_engine(sqlite_dbapi + db_name, echo=echo)
+        print('Connected to SQLite: ' + db_name)
     return sessionmaker(bind=engine)()
 
 
 sqlite_dbapi = 'sqlite:///'
 postgres_dbapi = 'postgresql+psycopg2:///'
-database_name = 'resttest'
+database_name = 'restaurants'
+test_database = 'rest_test'
 
 # Set this to "True" to use postgresql db or "False" for sqlite local file.
 use_postgresql = True # Boolean
 
 
-if __name__ == '__main__':
-    """Sets up a new database with the tables defined above.
+def create_all(echo=False, test=False):
+    """Adds tables defined above to the database.
     
     Deletes the database if it already exists and creates a new database in
     its place. The tables are defined in file as classes that inherit a
     declarative_base() instance.
     """
+    db_name = database_name if not test else test_database
     if use_postgresql:
         # Connect to default database: "postgres"
-        engine = create_engine(postgres_dbapi + 'postgres', echo=True)
-        conn = engine.connect()
-        conn.execute('COMMIT') # "DROP DATABASE" cannot run inside transaction.
-        conn.execute('DROP DATABASE IF EXISTS ' + database_name)
-        conn.execute('COMMIT')
-        conn.execute('CREATE DATABASE ' + database_name)
-        conn.close()
-        
-        engine = create_engine(postgres_dbapi + database_name, echo=True)
+        engine = create_engine(postgres_dbapi + db_name, echo=echo)
         Base.metadata.create_all(engine)
         
     else: # Connect to sqlite local database.
-        try:
-            os.remove(database_name)
-        except OSError:
-            pass
-        engine = create_engine(sqlite_dbapi + database_name, echo=True)
+        engine = create_engine(sqlite_dbapi + db_name, echo=echo)
         Base.metadata.create_all(engine)
         
+        
+def drop_all(echo=False, test=False):
+    """Deletes all tables from database."""
+    db_name = database_name if not test else test_database
+    if use_postgresql:
+        # Connect to default database: "postgres"
+        engine = create_engine(postgres_dbapi + db_name, echo=echo)
+        Base.metadata.create_all(engine)
+        
+    else: # Connect to sqlite local database.
+        engine = create_engine(sqlite_dbapi + db_name, echo=echo)
+        Base.metadata.create_all(engine)
+        
+
+def create_database(echo=False, test=False):
+    """Creates a new empty database.
+    
+    Deletes the database if it already exists and creates a new database in
+    its place. 
+    """
+    db_name = database_name if not test else test_database
+    if use_postgresql:
+        # Connect to default database: "postgres"
+        engine = create_engine(postgres_dbapi + 'postgres', echo=echo)
+        conn = engine.connect()
+        conn.execute('COMMIT') # "DROP DATABASE" cannot run inside transaction.
+        conn.execute('DROP DATABASE IF EXISTS ' + db_name)
+        conn.execute('COMMIT')
+        conn.execute('CREATE DATABASE ' + db_name)
+        conn.close()
+    else: # Connect to sqlite local database.
+        try:
+            os.remove(db_name)
+        except OSError:
+            pass
+        engine = create_engine(sqlite_dbapi + db_name, echo=echo)
+    
+
+if __name__ == '__main__':
+    create_database(echo=True)
+    create_all(echo=True)

@@ -5,7 +5,7 @@
 - [Select a few from list](http://stackoverflow.com/questions/1262955/how-do-i-pick-2-random-items-from-a-python-set)
 - [Need to flush() to get new record id](http://stackoverflow.com/questions/620610/sqlalchemy-obtain-primary-key-with-autoincrement-before-commit)
 - [Credentials not serializable error fix](http://stackoverflow.com/questions/22915461/google-login-server-side-flow-storing-credentials-python-examples/22930708#22930708)
-
+- [How to return a list of python packages installed on a server](http://stackoverflow.com/questions/739993/how-can-i-get-a-list-of-locally-installed-python-modules)
 
 
 ***SQLAlchemy.org***
@@ -49,4 +49,14 @@
 
 - [Grunt-Readme guide](https://www.npmjs.com/package/grunt-readme)
 
+
+***Docs.Python-Requests.org***
+
+- [Using Requests Quickstart Guide](http://docs.python-requests.org/en/latest/user/quickstart/#response-content)
+
+
+***Flask-Testing***
+
+- [Installing and using Flask-Testing](https://pythonhosted.org/Flask-Testing/)
+- [API references: assert____ methods](https://pythonhosted.org/Flask-Testing/#module-flask.ext.testing)
 
