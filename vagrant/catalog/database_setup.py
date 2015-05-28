@@ -82,10 +82,12 @@ def get_database_session(echo=False, test=False):
     db_name = database_name if not test else test_database
     if use_postgresql:
         engine = create_engine(postgres_dbapi + db_name, echo=echo)
-        print('Connected to PostgreSQL: ' + db_name)
+        if echo: 
+            print('Connected to PostgreSQL: ' + db_name)
     else:
         engine = create_engine(sqlite_dbapi + db_name, echo=echo)
-        print('Connected to SQLite: ' + db_name)
+        if echo:
+            print('Connected to SQLite: ' + db_name)
     return sessionmaker(bind=engine)()
 
 
@@ -122,11 +124,11 @@ def drop_all(echo=False, test=False):
     if use_postgresql:
         # Connect to default database: "postgres"
         engine = create_engine(postgres_dbapi + db_name, echo=echo)
-        Base.metadata.create_all(engine)
+        Base.metadata.drop_all(engine)
         
     else: # Connect to sqlite local database.
         engine = create_engine(sqlite_dbapi + db_name, echo=echo)
-        Base.metadata.create_all(engine)
+        Base.metadata.drop_all(engine)
         
 
 def create_database(echo=False, test=False):

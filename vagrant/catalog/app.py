@@ -17,9 +17,27 @@ import requests
 
 app = Flask(__name__)
 
-# Get a connection session to the database.
-# See `database_setup.py` for dbapi type and db tables.
-session = db.get_database_session()
+# Global variable for referencing a database session.
+global session # Set this with "start_session" method.
+
+
+def start_session(test=False):
+    """Gets a session (SQLAlchemy) with the database.
+    
+    Gets a new session with the testing or production database and assigns
+    it to the global `session` variable. The session is also added as an 
+    attribute to 'app'. See `database_setup.py` for dbapi type and db tables. 
+    
+    Args:
+        test: Boolean to use test database instead of the production one.
+    """
+    global session
+    session = db.get_database_session(test=test)
+    app.session = session
+
+    
+# Access start_session method using a reference to app.
+app.start_session = start_session
 
 
 ##############################################################################
@@ -104,12 +122,15 @@ def save_item():
         Response object with status of 200 if successful or 500 if failed.
     """
     try:
-        session.add(MenuItem(**request.get_json()))
+        new_rec = MenuItem(**request.get_json())
+        session.add(new_rec)
         session.commit()
     except IntegrityError:
         session.rollback()
-        return jsonify(status=500) # Internal server error
-    return jsonify(status=200)
+        res = jsonify(message='Menu item save failed') # Internal server error
+        res.status_code = 500
+        return res
+    return jsonify(id=new_rec.id)
 
 
 @app.route('/save/restaurant', methods=['POST'])
@@ -129,8 +150,10 @@ def save_restaurant():
         session.commit()
     except IntegrityError:
         session.rollback()
-        return jsonify(status=500) # Internal server error
-    return jsonify(status=200, id=new_rec.id)
+        res = jsonify(message='Menu item save failed') # Internal server error
+        res.status_code = 500
+        return res
+    return jsonify(id=new_rec.id)
 
 
 @app.route('/delete/item', methods=['POST'])
@@ -242,10 +265,8 @@ def gconnect():
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
-    answer = requests.get(userinfo_url, params=params)
-
-    data = answer.json()
-            
+    data = requests.get(userinfo_url, params=params).json()
+    
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
@@ -295,5 +316,6 @@ def show_environment():
 
 
 if __name__ == '__main__':
+    start_session()
     app.secret_key = 'secret_key'
     app.run(host='0.0.0.0', port=8000, debug=True)

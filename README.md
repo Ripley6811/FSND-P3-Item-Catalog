@@ -184,5 +184,9 @@ is running.
 - [Installing and using Flask-Testing](https://pythonhosted.org/Flask-Testing/)
 - [API references: assert____ methods](https://pythonhosted.org/Flask-Testing/#module-flask.ext.testing)
 
+***Blog posts***
+
+- [How to set headers in a testing post with JSON data](http://hairycode.org/2014/01/18/api-testing-with-flask-post/)
+
 
 
