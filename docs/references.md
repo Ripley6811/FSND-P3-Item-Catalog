@@ -6,12 +6,17 @@
 - [Need to flush() to get new record id](http://stackoverflow.com/questions/620610/sqlalchemy-obtain-primary-key-with-autoincrement-before-commit)
 - [Credentials not serializable error fix](http://stackoverflow.com/questions/22915461/google-login-server-side-flow-storing-credentials-python-examples/22930708#22930708)
 - [How to return a list of python packages installed on a server](http://stackoverflow.com/questions/739993/how-can-i-get-a-list-of-locally-installed-python-modules)
-
+- [How to serialize SQLAlchemy row data](http://stackoverflow.com/questions/5022066/how-to-serialize-sqlalchemy-result-to-json)
+- [SQL multi-column composite uniqueness](http://stackoverflow.com/a/10061143/1172891)
 
 ***SQLAlchemy.org***
 
 - [Connecting and using PostgreSQL](http://docs.sqlalchemy.org/en/rel_1_0/dialects/postgresql.html?highlight=postgresql#dialect-postgresql)
 
+
+***Flask.pocoo.org***
+
+- [How to organize a bigger app](http://flask.pocoo.org/docs/0.10/patterns/packages/)
 
 
 ***Jinja.pocoo.org***
@@ -63,4 +68,24 @@
 ***Blog posts***
 
 - [How to set headers in a testing post with JSON data](http://hairycode.org/2014/01/18/api-testing-with-flask-post/)
+
+
+***W3Schools.com***
+
+- [How to use and delete cookies](http://www.w3schools.com/js/js_cookies.asp)
+
+
+***Sphinx-doc.org***
+
+- [Getting started with Sphinx documentation](http://sphinx-doc.org/tutorial.html)
+- [reStructuredText guide](http://sphinx-doc.org/rest.html)
+
+***Docs.Python.org***
+
+- [unittest assert-methods](https://docs.python.org/2/library/unittest.html#assert-methods)
+
+
+***Sphinxcontrib***
+
+- [Documenting RESTful HTTP APIs](https://pythonhosted.org/sphinxcontrib-httpdomain/)
 

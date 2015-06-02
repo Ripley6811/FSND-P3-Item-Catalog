@@ -28,3 +28,13 @@
     top: 5px;
     right: 5px;
 }
+
+
+
+.badge {
+    padding: 2px 4px;
+}
+
+.glyphicon {
+    font-size: 18px;
+}

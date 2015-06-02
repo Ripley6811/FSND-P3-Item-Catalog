@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import os
-#import sys
-from sqlalchemy import Column, ForeignKey, Integer, Unicode
+import json
+from sqlalchemy import Column as Col, ForeignKey, UniqueConstraint, CheckConstraint
+from sqlalchemy import Integer, Unicode as Uni
+from sqlalchemy import CheckConstraint as Check
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
@@ -11,73 +13,186 @@ from sqlalchemy import create_engine
 Base = declarative_base()
 
 
+    
+###############################################################################
+# Tables
+###############################################################################
 class Restaurant(Base):
+    """Restaurant table in the database.
+    
+    Columns:
+        ========== ======= =====
+        name       type    description
+        ========== ======= =====
+        id         integer Primary key
+        name       unicode Name of restaurant
+        phone      unicode Phone number
+        note       unicode Information about restaurant
+        created_by integer Foreign key for a user record
+        ========== ======= =====
+        
+    Relationships:
+        ========= ======== ==========
+        name      table    type
+        ========= ======== ==========
+        menu_item MenuItem One-to-Many
+        ========= ======== ==========
+    """
     __tablename__ = 'restaurant'
 
-    id = Column(Integer, primary_key=True) # Auto-serialized by SQLAlchemy
-    name = Column(Unicode(250), nullable=False)
-    phone = Column(Unicode(50), default=u'')
-    note = Column(Unicode(250), default=u'')
+    id = Col(Integer, primary_key=True) # Auto-serialized by SQLAlchemy
+    name = Col(Uni(250), nullable=False)
+    phone = Col(Uni(50), default=u'')
+    note = Col(Uni(250), default=u'')
+    created_by = Col(Integer, ForeignKey('user.id'), nullable=False)
     
     menu_items = relationship('MenuItem', cascade='delete')
-
+    
     @property
-    def sdic(self):
-        """Return object data in easily serializeable format"""
-        return to_serializable_dic(self)
+    def sdict(self):
+        """Return object data in serializeable format"""
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+
+class MenuItemRating(Base):
+    """Menu item rating table in the database.
+    
+    Columns:
+        ======= ======= ==============
+        name    type    description
+        ======= ======= ==============
+        id      integer Primary key
+        rating  integer Rating of 0 to 3
+        item_id integer Foreign key for a menu item record
+        user_id integer Foreign key for a user record
+        ======= ======= ==============
+        
+    Relationships:
+        ========= ======== ==========
+        name      table    type
+        ========= ======== ==========
+        item      MenuItem One-to-One
+        ========= ======== ==========
+    """
+    __tablename__ = 'menu_item_rating'
+    
+    id = Col(Integer, primary_key=True)
+    user_id = Col(Integer, ForeignKey('user.id'), nullable=False)
+    item_id = Col(Integer, ForeignKey('menu_item.id'), nullable=False)
+    rating = Col(Integer, Check('rating<4'), nullable=False)
+    __table_args__ = (UniqueConstraint('user_id', 'item_id'),)
+    
+    item = relationship('MenuItem')
+    
+    @property
+    def sdict(self):
+        """Return object data in serializeable format"""
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class MenuItem(Base):
+    """Menu item table in the database.
+    
+    Columns:
+        ============= ======= ==============
+        name          type    description
+        ============= ======= ==============
+        id            integer Primary key
+        name          unicode Name of item
+        description   unicode Description of food item
+        price         unicode Price of food item
+        course        unicode Type of food like main dish or dessert
+        restaurant_id integer Foreign key for a restaurant record
+        created_by    integer Foreign key for a user record
+        ============= ======= ==============
+        
+    Relationships:
+        ========== =============== ==========
+        name       table           type
+        ========== =============== ==========
+        restaurant Restaurant      Many-to-One
+        ratings    MenuItemRatings One-to-Many
+        ========== =============== ==========
+    """
     __tablename__ = 'menu_item'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(Unicode(80), nullable=False)
-    description = Column(Unicode(500))
-    price = Column(Unicode(8))
-    course = Column(Unicode(250))
-    restaurant_id = Column(Integer, ForeignKey('restaurant.id'), 
-                           nullable=False)
-    rating = Column(Integer, default=0)
+    id = Col(Integer, primary_key=True)
+    name = Col(Uni(80), nullable=False)
+    description = Col(Uni(500), default=u'')
+    price = Col(Uni(8), default=u'')
+    course = Col(Uni(250), default=u'')
+    restaurant_id = Col(Integer, ForeignKey('restaurant.id'), nullable=False)
+    created_by = Col(Integer, ForeignKey('user.id'), nullable=False)
     
-    restaurant = relationship(Restaurant)
+    restaurant = relationship('Restaurant')
+    ratings = relationship('MenuItemRating')
 
     @property
-    def sdic(self):
-        """Return object data in easily serializeable format"""
-        d = to_serializable_dic(self)
-        # Include restaurant name.
-        d['restaurant_name'] = self.restaurant.name
-        return d
+    def sdict(self):
+        """Return object data in serializeable format.
+        
+        Also includes the restaurant name and totals for each rating:
+            * restaurant_name - string
+            * favorite_count - integer
+            * good_count - integer
+            * bad_count - integer
+        """
+        sd = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        sd['restaurant_name'] = self.restaurant.name
+        sd['favorite_count'] = len([each for each in self.ratings if each.rating == 1])
+        sd['good_count'] = len([each for each in self.ratings if each.rating == 2])
+        sd['bad_count'] = len([each for each in self.ratings if each.rating == 3])
+        return sd
+    
 
+class User(Base):
+    """User table in the database.
     
-def to_serializable_dic(obj):
-    """Converts the object into a serializable dictionary.
-    
-    Args:
-        obj: Reference to an object.
-    
-    Returns:
-        A python dictionary.
+    Columns:
+        ======= ======= =====
+        name    type    description
+        ======= ======= =====
+        id      integer Primary key
+        name    unicode User name
+        email   unicode User email
+        picture unicode URI to user avatar
+        ======= ======= =====
+        
+    Relationships:
+        ================= =============== ==========
+        name              table           type
+        ================= =============== ==========
+        menu_item_ratings MenuItemRatings One-to-Many
+        ================= =============== ==========
     """
-    filtered_copy = {}
-    for key, value in obj.__dict__.iteritems():
-        if not key.startswith(u'_'): # Skip private variables/references.
-            filtered_copy.update({key:value})
-    return filtered_copy
+    __tablename__ = 'user'
+    
+    id = Col(Integer, primary_key=True) # Auto-serialized by SQLAlchemy
+    name = Col(Uni(250), nullable=False)
+    email = Col(Uni(250), default=u'')
+    picture = Col(Uni(250), default=u'')
 
+    menu_item_ratings = relationship('MenuItemRating', cascade='delete')
+    
+    @property
+    def sdict(self):
+        """Return object data in serializeable format."""
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+    
+###############################################################################
+# Functions
+###############################################################################
 def get_database_session(echo=False, test=False):
     """Returns a session for executing queries.
     
     Connects to a database, creates an engine and returns a session connection
     to the engine.
     
-    Args:
-        echo: Boolean passed to create_engine's echo arg.
-        test: Boolean to use test database instead of the production one.
+    :arg boolean echo: Boolean passed to ``create_engine``'s echo arg.
+    :arg boolean test: Boolean to use test database instead of the production one.
         
-    Returns:
-        A SQLAlchemy Session instance.
+    :returns: A SQLAlchemy Session instance.
     """
     db_name = database_name if not test else test_database
     if use_postgresql:
@@ -105,7 +220,7 @@ def create_all(echo=False, test=False):
     
     Deletes the database if it already exists and creates a new database in
     its place. The tables are defined in file as classes that inherit a
-    declarative_base() instance.
+    ``declarative_base()`` instance.
     """
     db_name = database_name if not test else test_database
     if use_postgresql:
@@ -118,8 +233,15 @@ def create_all(echo=False, test=False):
         Base.metadata.create_all(engine)
         
         
-def drop_all(echo=False, test=False):
-    """Deletes all tables from database."""
+def drop_all(echo=False, test=True):
+    """Deletes all tables from database.
+    
+    The ``test`` keyword is set to *True* by default because it is used mostly
+    for testing and will help avoid accidentally dropping production tables.
+    
+    :arg boolean echo: Boolean passed to ``create_engine``'s echo arg.
+    :arg boolean test: Boolean to use test database instead of the production one.
+    """
     db_name = database_name if not test else test_database
     if use_postgresql:
         # Connect to default database: "postgres"
@@ -136,6 +258,9 @@ def create_database(echo=False, test=False):
     
     Deletes the database if it already exists and creates a new database in
     its place. 
+    
+    :arg boolean echo: Boolean passed to ``create_engine``'s echo arg.
+    :arg boolean test: Boolean to use test database instead of the production one.
     """
     db_name = database_name if not test else test_database
     if use_postgresql:

@@ -42,31 +42,24 @@
 
 <script>
 var view_model = view_model || {};
-    
+view_model._csrf = '{{ _csrf }}'
 view_model.user = {
-    username: ko.observable(),
-    picture: ko.observable(),
+    username: ko.observable('{{ username }}'),
+    picture: ko.observable('{{ picture }}'),
 }
 
 view_model.logout = function() {
     post('/gdisconnect', {}, function(response) {
+        console.log(response);
         if (response.status == 'ok') {
             view_model.user.username('');
             view_model.user.picture('');
+//            document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+//            document.cookie = "picture=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         }
     });
 };
     
-post('/get/user_info', {}, function(response) {
-    if (response.username != undefined) {
-        view_model.user.username(response.username);
-        view_model.user.picture(response.picture);
-    }
-});
-
-post('/csrf', {}, function(response) {
-    view_model._csrf = response.csrf;
-});
 
 ko.applyBindings(view_model, document.getElementById('body'));
 </script>

@@ -130,6 +130,7 @@ is running.
 - [Need to flush() to get new record id](http://stackoverflow.com/questions/620610/sqlalchemy-obtain-primary-key-with-autoincrement-before-commit)
 - [Credentials not serializable error fix](http://stackoverflow.com/questions/22915461/google-login-server-side-flow-storing-credentials-python-examples/22930708#22930708)
 - [How to return a list of python packages installed on a server](http://stackoverflow.com/questions/739993/how-can-i-get-a-list-of-locally-installed-python-modules)
+- [How to serialize SQLAlchemy row data](http://stackoverflow.com/questions/5022066/how-to-serialize-sqlalchemy-result-to-json)
 
 
 ***SQLAlchemy.org***

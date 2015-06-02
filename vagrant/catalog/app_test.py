@@ -77,7 +77,7 @@ class TestDatabase(MyTestCase):
         # Restaurant record data must match original data.
         r0 = response.json['restaurants'][0]
         self.assertIsInstance(r0.pop('id'), int)
-        self.assertEquals(r0, self.r_data)
+        self.assertDictContainsSubset(self.r_data, r0)
         
     def test_add_bad_restaurant(self):
         # Insert record must return status 500 if failure.
@@ -119,9 +119,8 @@ class TestDatabase(MyTestCase):
         # Pop and check attributes that the database added.
         self.assertIsInstance(r0.pop('id'), int)
         self.assertIsInstance(r0.pop('restaurant_name'), unicode)
-        self.assertIn(r0.pop('rating'), [0,1,2,3])
         # Compare other data with original data.
-        self.assertEquals(r0, mi_data)
+        self.assertDictContainsSubset(mi_data, r0)
         
         
 class MyLiveTest(LiveServerTestCase):
