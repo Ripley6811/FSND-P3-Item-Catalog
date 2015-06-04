@@ -125,7 +125,7 @@ class MenuItem(Base):
     created_by = Col(Integer, ForeignKey('user.id'), nullable=False)
     
     restaurant = relationship('Restaurant')
-    ratings = relationship('MenuItemRating')
+    ratings = relationship('MenuItemRating', cascade='delete')
 
     @property
     def sdict(self):

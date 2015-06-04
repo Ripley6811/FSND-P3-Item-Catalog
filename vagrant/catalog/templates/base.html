@@ -50,13 +50,7 @@ view_model.user = {
 
 view_model.logout = function() {
     post('/gdisconnect', {}, function(response) {
-        console.log(response);
-        if (response.status == 'ok') {
-            view_model.user.username('');
-            view_model.user.picture('');
-//            document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-//            document.cookie = "picture=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
-        }
+        if (response.status == 'ok') window.location.reload();
     });
 };
     

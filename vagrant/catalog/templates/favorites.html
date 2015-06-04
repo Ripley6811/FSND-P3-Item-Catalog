@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<a id="back-btn" class="btn btn-lg btn-primary" href="/"><span class="glyphicon glyphicon-menu-left"></span></a>
+<a id="back-btn" class="btn btn-lg btn-primary" href="/"><span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-home"></span></a>
 <div class="container" style="margin-top:28px">
     <div class="row">
         <div class="col-md-6">
@@ -40,7 +40,7 @@ view_model.see_menu = function(item) {
  * Send an AJAX request for list of restaurants and add to display.
  */
 view_model.get_favorites = function() {
-    post('/get/favorites', {}, function(response) {
+    post('/api/favorites', {}, function(response) {
         view_model.items.removeAll();
         for (var i=0; i<response.items.length; i++) {
             view_model.items.push(response.items[i]);

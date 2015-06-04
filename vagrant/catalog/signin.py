@@ -7,7 +7,8 @@ from database_setup import User
 
 
 @app.route('/gconnect', methods=['POST'])
-def gconnect():    
+def gconnect():
+    """Handles G+ third-party signin."""
     code = request.get_json()['data']
     try:
         oauth_flow = flow_from_clientsecrets('clientsecrets.json', scope='')
@@ -64,15 +65,15 @@ def gconnect():
     login_session['email'] = data['email']
     
     # Get user id from database or add new user.
-    user_rec = app.db.query(User).filter_by(name = data['name'], email=data['email']).first()
+    user_rec = app.db_session.query(User).filter_by(name = data['name'], email=data['email']).first()
     if user_rec:
         login_session['user_id'] = user_rec.id
     else:
         new_user = User(name = data['name'], 
                         email = data['email'], 
                         picture = data['picture'])
-        app.db.add(new_user)
-        app.db.commit()
+        app.db_session.add(new_user)
+        app.db_session.commit()
         login_session['user_id'] = new_user.id
     
     flash("you are now logged in as {}".format(login_session['username']))
@@ -84,6 +85,7 @@ def gconnect():
 
 @app.route('/gdisconnect', methods=['POST'])
 def gdisconnect():
+    """Handles G+ signout."""
 #    login_session.clear()
     # Only disconnect a connected user.
     access_token = login_session.get('access_token', None)

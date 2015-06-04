@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API Reference &mdash; FSND-P3-Item-Catalog 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="FSND-P3-Item-Catalog 1.0 documentation" href="index.html" />
+    <link rel="prev" title="Database module (database_setup.py)" href="database_setup.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="http-routingtable.html" title="HTTP Routing Table"
+             >routing table</a> |</li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="database_setup.html" title="Database module (database_setup.py)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSND-P3-Item-Catalog 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="get-list-of-restaurants">
+<h2>Get list of restaurants<a class="headerlink" href="#get-list-of-restaurants" title="Permalink to this headline">¶</a></h2>
+<dl class="get">
+<dt id="get--api-restaurants">
+<code class="descname">GET </code><code class="descname">/api/restaurants</code><a class="headerlink" href="#get--api-restaurants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of restaurant records in the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authentication:</th><td class="field-body"><p class="first">Not required.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Response:</th><td class="field-body"><p class="first">JSON</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"><div class="first last highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;restaurants&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;created_by&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Urban Burger&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;note&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;phone&quot;</span><span class="p">:</span> <span class="s2">&quot;555-1234&quot;</span>
+    <span class="p">},</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;ok&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="get-restaurant-menu">
+<h2>Get restaurant menu<a class="headerlink" href="#get-restaurant-menu" title="Permalink to this headline">¶</a></h2>
+<dl class="get">
+<dt id="get--api-menu">
+<code class="descname">GET </code><code class="descname">/api/menu</code><a class="headerlink" href="#get--api-menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of restaurant menu items from the database. Enter either a restaurant name or it&#8217;s database ID.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authentication:</th><td class="field-body"><p class="first">Not required.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>restaurant_id</strong> (<em>optional</em>) &#8211; Database ID for a restaurant.</li>
+<li><strong>restaurant</strong> (<em>optional</em>) &#8211; Name of a restaurant in the database.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Response:</th><td class="field-body"><p class="first">JSON</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Example:</th><td class="field-body"><div class="first last highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;menu&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;bad_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nt">&quot;course&quot;</span><span class="p">:</span> <span class="s2">&quot;Entree&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;created_by&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;a Vietnamese noodle soup consisting of broth, linguine-shaped rice noodles called banh pho, a few herbs, and meat.&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;favorite_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nt">&quot;good_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Pho&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;price&quot;</span><span class="p">:</span> <span class="s2">&quot;8.99&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;restaurant_id&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+      <span class="nt">&quot;restaurant_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Panda Garden&quot;</span>
+    <span class="p">},</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;ok&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="get-list-of-favorites">
+<h2>Get list of favorites<a class="headerlink" href="#get-list-of-favorites" title="Permalink to this headline">¶</a></h2>
+<dl class="get">
+<dt id="get--api-favorites">
+<code class="descname">GET </code><code class="descname">/api/favorites</code><a class="headerlink" href="#get--api-favorites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a random list of three of a user&#8217;s favorited items.
+Pass a <em>user_id</em> as a parameter or default to the currently logged in user.
+Returns an error if neither is found.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authentication:</th><td class="field-body"><p class="first">Optional.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_id</strong> (<em>optional</em>) &#8211; ID of user.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Response:</th><td class="field-body"><p class="first">JSON</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Example:</th><td class="field-body"><div class="first last highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;items&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;bad_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nt">&quot;course&quot;</span><span class="p">:</span> <span class="s2">&quot;Dessert&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;created_by&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+      <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;fresh baked and served with ice cream&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;favorite_count&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+      <span class="nt">&quot;good_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Chocolate Cake&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;price&quot;</span><span class="p">:</span> <span class="s2">&quot;3.99&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;restaurant_id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nt">&quot;restaurant_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Urban Burger&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;bad_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nt">&quot;course&quot;</span><span class="p">:</span> <span class="s2">&quot;Beverage&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;created_by&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+      <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;16oz of refreshing goodness&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;favorite_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nt">&quot;good_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Root Beer&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;price&quot;</span><span class="p">:</span> <span class="s2">&quot;1.99&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;restaurant_id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nt">&quot;restaurant_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Urban Burger&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;bad_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nt">&quot;course&quot;</span><span class="p">:</span> <span class="s2">&quot;Appetizer&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;created_by&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maguro, Sake, Hamachi, Unagi, Uni, TORO!&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;favorite_count&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nt">&quot;good_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">35</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Nigiri Sampler&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;price&quot;</span><span class="p">:</span> <span class="s2">&quot;6.75&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;restaurant_id&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+      <span class="nt">&quot;restaurant_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Andala&#39;s&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API Reference</a><ul>
+<li><a class="reference internal" href="#get-list-of-restaurants">Get list of restaurants</a></li>
+<li><a class="reference internal" href="#get-restaurant-menu">Get restaurant menu</a></li>
+<li><a class="reference internal" href="#get-list-of-favorites">Get list of favorites</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="database_setup.html"
+                        title="previous chapter">Database module (<cite>database_setup.py</cite>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="http-routingtable.html" title="HTTP Routing Table"
+             >routing table</a> |</li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="database_setup.html" title="Database module (database_setup.py)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSND-P3-Item-Catalog 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Jay W Johnson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

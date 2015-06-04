@@ -17,6 +17,7 @@
 ***Flask.pocoo.org***
 
 - [How to organize a bigger app](http://flask.pocoo.org/docs/0.10/patterns/packages/)
+- [Log in decorator needs 'wraps'](http://flask.pocoo.org/docs/0.10/patterns/viewdecorators/)
 
 
 ***Jinja.pocoo.org***

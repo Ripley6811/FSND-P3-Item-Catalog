@@ -10,10 +10,7 @@ function signinCallback(authResult) {
         post('/gconnect?_csrf=' + view_model._csrf, 
              {data: authResult['code']}, 
              function(response) {
-                if (response.status == 'ok') {
-                    view_model.user.username(response.username);
-                    view_model.user.picture(response.picture);
-                }
+                if (response.status == 'ok') window.location.reload();
              }
         );
     } else {

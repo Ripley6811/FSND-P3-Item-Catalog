@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block body %}
+<a id="back-btn" class="btn btn-lg btn-primary" href="/"><span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-home"></span></a>
 <div class="container" style="margin-top:50px">
     <div>
         <h1 data-bind="text: current_restaurant.name"></h1>
@@ -20,7 +21,7 @@
             </div>
         </div>
         <br>
-        <button type="button" class="btn btn-success text-uppercase" data-bind="click: save">Save new restaurant</button>
+        <button type="button" class="btn btn-success text-uppercase" data-bind="click: submit">Save new restaurant</button>
         <a class="btn btn-danger text-uppercase" href="{{ url_for('restaurants') }}">Cancel new restaurant</a>
     </div>
 </div>
@@ -29,29 +30,45 @@
 var view_model = view_model || {};
 
 /**
- * KO observable model for new item.
+ * KO observable model for new restaurant.
  */
 view_model.current_restaurant = {
-    name: ko.observable(),
-    phone: ko.observable(),
-    note: ko.observable(),
+    name: ko.observable('{{ restaurant.name }}'),
+    phone: ko.observable('{{ restaurant.phone }}'),
+    note: ko.observable('{{ restaurant.note }}'),
 };
 
 /**
- * Send an AJAX request for item data and add to food_list array for display.
+ * Add restaurant ID if provided for editing existing record.
  */
-view_model.save = function() {
-    // Convert current_item KO model to serializable object.
-    var params = ko.toJS(view_model.current_restaurant); 
-    post('/save/restaurant', params, function(response) {
+var restaurant_id = parseInt('{{ restaurant.id }}');
+if (!isNaN(restaurant_id)) {
+    view_model.current_restaurant.id = restaurant_id;
+}
+
+/**
+ * Send data to server for saving.
+ */
+view_model.submit = function() {
+    // Convert current_restaurant KO model to serializable object.
+    var params = {
+        _csrf: view_model._csrf,
+        restaurant: ko.toJS(view_model.current_restaurant)
+    };
+    var callback = function(response) {
         // Go to restaurant menu view if successful.
-        if (response.status == 200) {
-            window.location = '/menu/' + response.id + '/';
+        if (response.status == 'ok') {
+            window.location = '/menu/' + response.id;
         } else {
             console.log(response.status);
-            alert('There was a problem saving the new restaurant to the database.');
+            alert('There was a problem submitting the restaurant to the database.');
         }
-    });
+    };
+    if (params.restaurant.id) {
+        post('/update/restaurant', params, callback);
+    } else {
+        post('/save/restaurant', params, callback);
+    }
 }
 </script>
 

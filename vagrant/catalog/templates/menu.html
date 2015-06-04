@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<a id="back-btn" class="btn btn-lg btn-primary" href="/"><span class="glyphicon glyphicon-menu-left"></span></a>
+<a id="back-btn" class="btn btn-lg btn-primary" href="/"><span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-home"></span></a>
 <div class="container" style="margin-top:28px">
     <div class="row text-center">
         <h1 data-bind="text: restaurant.name"></h1>
@@ -12,7 +12,7 @@
             <strong data-bind="text: restaurant.phone"></strong>
         </div>
         <div class="col-md-5 col-md-offset-4 text-center" data-bind="visible: user.username">
-            <a class="btn btn-primary text-uppercase" href="/new/item/{{restaurant.id}}">Add new item</a>
+            <a class="btn btn-primary text-uppercase" href="{{ url_for('new_item', restaurant_id=restaurant.id) }}">Add new item</a>
             <a class="btn btn-warning text-uppercase" data-bind="click: delete_restaurant">Delete Restaurant</a>
         </div>
     </div>
@@ -26,15 +26,15 @@
                                 <strong data-bind="text: name"></strong>
                             </div>
                             <div class="col-md-6 btn-group">
-                                <button type="button" class="btn btn-sm" data-bind="css: {'btn-warning': rating() == 1}, click: $parent.set_rating.bind($data, 1)"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span><br><span class="badge" data-bind="text: tally[1]()"></span></button>
-                                <button type="button" class="btn btn-sm" data-bind="css: {'btn-success': rating() == 2}, click: $parent.set_rating.bind($data, 2)"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><br><span class="badge" data-bind="text: tally[2]()"></span></button>
-                                <button type="button" class="btn btn-sm" data-bind="css: {'btn-danger': rating() == 3}, click: $parent.set_rating.bind($data, 3)"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span><br><span class="badge" data-bind="text: tally[3]()"></span></button>
+                                <button type="button" class="btn btn-sm" data-bind="css: {'btn-warning': rating() == 1}, click: $parent.set_rating.bind($data, 1), enable: $parent.user.username"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span><br><span class="badge" data-bind="text: tally[1]()"></span></button>
+                                <button type="button" class="btn btn-sm" data-bind="css: {'btn-success': rating() == 2}, click: $parent.set_rating.bind($data, 2), enable: $parent.user.username"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><br><span class="badge" data-bind="text: tally[2]()"></span></button>
+                                <button type="button" class="btn btn-sm" data-bind="css: {'btn-danger': rating() == 3}, click: $parent.set_rating.bind($data, 3), enable: $parent.user.username"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span><br><span class="badge" data-bind="text: tally[3]()"></span></button>
                             </div>
                         </div>
                     </td>
                     <td data-bind="text: description"></td>
                     <td>$<span data-bind="text: price"></span></td>
-                    <td>
+                    <td data-bind="visible: $parent.user.username">
                         <button type="button" class="btn btn-primary" data-bind="click: $parent.edit"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
                     </td>
                 </tr>
@@ -49,17 +49,11 @@ var view_model = view_model || {};
 view_model.restaurant = {{ restaurant|tojson }};
     
 
-view_model.edit = function(menu_item) {
-    console.log(menu_item);
-};
-    
-
 view_model.delete_restaurant = function() {
     var c = confirm("Are you sure you want to delete this restaurant and all menu items?");
     if (c) {
         var params = {id: view_model.restaurant.id,
                      _csrf: view_model._csrf};
-        console.log(ko.toJS(params));
         post('/delete/restaurant', params, function(response) {
             // Go to list of restaurants.
             if (response.status == 'ok') {
@@ -82,7 +76,9 @@ view_model.set_rating = function(rating) {
         // Adjust the rating counters.
         this.tally[rating](this.tally[rating]() + 1);
         this.tally[old_rating](this.tally[old_rating]() - 1);
-        post('/save/rating', {item_id: this.id, rating: rating},
+        post('/save/rating', {_csrf: view_model._csrf,
+                              item_id: this.id, 
+                              rating: rating},
              function(response) {
             if (response.status != 'ok') {
                 window.location = "{{ url_for('restaurant_view', restaurant_id=restaurant.id) }}";
@@ -109,6 +105,11 @@ view_model.get_items = function() {
         }
     });
 }
+
+view_model.edit = function(menu_item) {
+    window.location = "{{ url_for('new_item', restaurant_id=restaurant.id) }}?id="+menu_item.id+"&rating="+menu_item.rating();
+};
+    
 view_model.food_list = ko.observableArray();
 view_model.get_items();
 </script>

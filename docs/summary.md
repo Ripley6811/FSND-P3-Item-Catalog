@@ -9,6 +9,9 @@ It was built using the Flask microframework connected to a PostgreSQL database,
 the KnockoutJS MVVM for a dynamic front-end, and Google+ third-party login
 system (OAuth2).
 
+Grunt-Readme was used to generate the README from templates. Sphinx for 
+creating the project and API documentation website.
+
 Author: {%= author %}
 
 [Link to GitHub repository]({%= homepage %})

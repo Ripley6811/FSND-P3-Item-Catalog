@@ -5,18 +5,7 @@
 
 Welcome to Jay's FSND-P3-Item-Catalog documentation!
 ====================================================
-
-Contents
---------
-
-.. toctree::
-   :maxdepth: 2
    
-   app
-   database_setup
-   api
-   
-
 Summary
 -------
 Fullstack project built using Flask with a PostgreSQL database on a virtual machine.
@@ -33,6 +22,18 @@ system (OAuth2).
 Author: Jay W Johnson
 
 Link to GitHub repository - https://github.com/Ripley6811/FSND-P3-Item-Catalog
+
+
+
+Contents
+--------
+
+.. toctree::
+   :maxdepth: 2
+   
+   app
+   database_setup
+   api
     
 
 

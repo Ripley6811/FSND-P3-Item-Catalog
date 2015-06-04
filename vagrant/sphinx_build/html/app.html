@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Catalog package &mdash; FSND-P3-Item-Catalog 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="FSND-P3-Item-Catalog 1.0 documentation" href="index.html" />
+    <link rel="next" title="Database module (database_setup.py)" href="database_setup.html" />
+    <link rel="prev" title="Welcome to Jay’s FSND-P3-Item-Catalog documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="http-routingtable.html" title="HTTP Routing Table"
+             >routing table</a> |</li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="database_setup.html" title="Database module (database_setup.py)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Jay’s FSND-P3-Item-Catalog documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSND-P3-Item-Catalog 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="catalog-package">
+<h1>Catalog package<a class="headerlink" href="#catalog-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-catalog.__init__">
+<span id="init"></span><h2>__init__<a class="headerlink" href="#module-catalog.__init__" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="catalog.__init__.start_session">
+<code class="descclassname">catalog.__init__.</code><code class="descname">start_session</code><span class="sig-paren">(</span><em>test=False</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.__init__.start_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a session (SQLAlchemy) with the database.</p>
+<p>Gets a new session with the testing or production database and assigns
+it to the global <cite>session</cite> variable. The session is also added as an 
+attribute to &#8216;app&#8217;. See <cite>database_setup.py</cite> for dbapi type and db tables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>test</strong> (<em>boolean</em>) &#8211; Boolean to use test database instead of the production one.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-catalog.views">
+<span id="views-module"></span><h2>Views module<a class="headerlink" href="#module-catalog.views" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="catalog.views.authorize">
+<code class="descclassname">catalog.views.</code><code class="descname">authorize</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.authorize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator for first checking user login state before proceeding
+with page load. Redirects browser to main page if not logged in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.views.new_item">
+<code class="descclassname">catalog.views.</code><code class="descname">new_item</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.new_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <strong>private</strong> page for entering a new menu item for a restaurant.</p>
+<p>Redirects to restaurant list if user is not logged in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.views.new_restaurant">
+<code class="descclassname">catalog.views.</code><code class="descname">new_restaurant</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.new_restaurant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <strong>private</strong> page for entering a new restaurant.</p>
+<p>Redirects to restaurant list if user is not logged in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.views.random_favorites">
+<code class="descclassname">catalog.views.</code><code class="descname">random_favorites</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.random_favorites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <strong>private</strong> page displaying a random selection of user&#8217;s favorites.</p>
+<p>Redirects to restaurant list if user is not logged in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.views.restaurant_view">
+<code class="descclassname">catalog.views.</code><code class="descname">restaurant_view</code><span class="sig-paren">(</span><em>restaurant_id</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.restaurant_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a public menu page showing a restaurant&#8217;s menu items.</p>
+<p>Editing and rating buttons are invisible/disabled if user is not logged in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.views.restaurants">
+<code class="descclassname">catalog.views.</code><code class="descname">restaurants</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.restaurants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a public main page showing list of restaurants.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-catalog.signin">
+<span id="signin-module"></span><h2>Signin module<a class="headerlink" href="#module-catalog.signin" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="catalog.signin.gconnect">
+<code class="descclassname">catalog.signin.</code><code class="descname">gconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.signin.gconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles G+ third-party signin.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.signin.gdisconnect">
+<code class="descclassname">catalog.signin.</code><code class="descname">gdisconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.signin.gdisconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles G+ signout.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-catalog.api">
+<span id="api-module"></span><h2>API module<a class="headerlink" href="#module-catalog.api" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="catalog.api.authorize">
+<code class="descclassname">catalog.api.</code><code class="descname">authorize</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.authorize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator for first checking user login state before proceeding
+with function. Returns 401 unauthorized error if not logged in or csrf
+check fails.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.delete_item">
+<code class="descclassname">catalog.api.</code><code class="descname">delete_item</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.delete_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes an item from the database.</p>
+<dl class="docutils">
+<dt>Return:</dt>
+<dd>Response object with status of &#8216;ok&#8217;.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.delete_restaurant">
+<code class="descclassname">catalog.api.</code><code class="descname">delete_restaurant</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.delete_restaurant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a restaurant from the database.</p>
+<dl class="docutils">
+<dt>Return:</dt>
+<dd>Response object with status of &#8216;ok&#8217;.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.get_favorites">
+<code class="descclassname">catalog.api.</code><code class="descname">get_favorites</code><span class="sig-paren">(</span><em>user_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.get_favorites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns three random favorited menu items.</p>
+<p>Pass a user_id as a parameter or default to the currently logged in user.
+Returns an error if neither exists.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user_id</strong> (<em>optional</em>) &#8211; ID of user.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.get_items">
+<code class="descclassname">catalog.api.</code><code class="descname">get_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.get_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of all menu items for a restaurant.</p>
+<p>Items are sorted by overall popularity: number of &#8216;favorite&#8217; ratings down
+to number of &#8216;dislike&#8217; ratings.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.save_item">
+<code class="descclassname">catalog.api.</code><code class="descname">save_item</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.save_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves new food item to the database.</p>
+<p>Incoming request data must contain key-value pairs for new item.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Response object with id of new menu item record.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.save_rating">
+<code class="descclassname">catalog.api.</code><code class="descname">save_rating</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.save_rating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves a menu item rating to the database.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.save_restaurant">
+<code class="descclassname">catalog.api.</code><code class="descname">save_restaurant</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.save_restaurant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves new restaurant to the database.</p>
+<p>Incoming request data must contain key-value pairs for new item.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Response object with id of the new record.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.show_environment">
+<code class="descclassname">catalog.api.</code><code class="descname">show_environment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.show_environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of installed packages on the server environment.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.update_item">
+<code class="descclassname">catalog.api.</code><code class="descname">update_item</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.update_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves changes to an existing item.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON with status of &#8216;ok&#8217; or &#8216;error&#8217; and message.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Catalog package</a><ul>
+<li><a class="reference internal" href="#module-catalog.__init__">__init__</a></li>
+<li><a class="reference internal" href="#module-catalog.views">Views module</a></li>
+<li><a class="reference internal" href="#module-catalog.signin">Signin module</a></li>
+<li><a class="reference internal" href="#module-catalog.api">API module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Jay&#8217;s FSND-P3-Item-Catalog documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="database_setup.html"
+                        title="next chapter">Database module (<cite>database_setup.py</cite>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/app.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="http-routingtable.html" title="HTTP Routing Table"
+             >routing table</a> |</li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="database_setup.html" title="Database module (database_setup.py)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Jay’s FSND-P3-Item-Catalog documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FSND-P3-Item-Catalog 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, Jay W Johnson.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

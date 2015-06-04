@@ -3,9 +3,9 @@ from flask_testing import TestCase, LiveServerTestCase
 import json
 import requests
 
-from app import app, db
+from catalog import app, db
 """
-Access the active session with `app.session`
+Access the active session with `app.db_session`
 Access the database table classes through `db`: 
    `db.MenuItem`, `db.Restaurant`, etc.
 """
@@ -23,7 +23,7 @@ class MyTestCase(TestCase):
         app.start_session(test=True)
         
     def tearDown(self):
-        app.session.close()
+        app.db_session.close()
         db.drop_all(test=True)
 
 
@@ -47,7 +47,7 @@ class TestJSONResponse(MyTestCase):
     def test_some_json(self):
         response = self.client.get("/environment")
         self.assertIsInstance(response.json, dict)
-        self.assertIn('packages', response.json)
+        self.assertIn('installed_packages', response.json)
         
 
 class TestDatabase(MyTestCase):
@@ -88,11 +88,11 @@ class TestDatabase(MyTestCase):
                                     content_type='application/json')
         self.assert500(response, 'Save restaurant data post did not fail')
     
-    def test_add_menu_item_sans_restaurant(self):
+    def test_add_menu_item_sans_userlogin(self):
         response = self.client.post('/save/item', 
                                     data=json.dumps(self.mi_baddata), 
                                     content_type='application/json')
-        self.assert500(response, 'Bad insert did not return status code 500')
+        self.assert401(response, 'Did not return 401')
         
     def test_add_menu_item_with_restaurant(self):
         # Add restaurant
@@ -136,7 +136,7 @@ class MyLiveTest(LiveServerTestCase):
         app.start_session(test=True)
         
     def tearDown(self):
-        app.session.close()
+        app.db_session.close()
         db.drop_all(test=True)
     
     
