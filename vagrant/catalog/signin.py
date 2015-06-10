@@ -86,7 +86,6 @@ def gconnect():
 @app.route('/gdisconnect', methods=['POST'])
 def gdisconnect():
     """Handles G+ signout."""
-#    login_session.clear()
     # Only disconnect a connected user.
     access_token = login_session.get('access_token', None)
     if access_token is None:

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import os
 import json
 from sqlalchemy import Column as Col, ForeignKey, UniqueConstraint, CheckConstraint
@@ -13,7 +12,6 @@ from sqlalchemy import create_engine
 Base = declarative_base()
 
 
-    
 ###############################################################################
 # Tables
 ###############################################################################
@@ -183,6 +181,15 @@ class User(Base):
 ###############################################################################
 # Functions
 ###############################################################################
+# Global variables for database API and database names.
+sqlite_dbapi = 'sqlite:///'
+postgres_dbapi = 'postgresql+psycopg2:///'
+database_name = 'restaurants' # Production database
+test_database = 'rest_test' # Testing database used by catalog_app_test.py.
+
+# Set this to "True" to use postgresql db or "False" for sqlite local file.
+use_postgresql = True # Boolean
+
 def get_database_session(echo=False, test=False):
     """Returns a session for executing queries.
     
@@ -206,21 +213,15 @@ def get_database_session(echo=False, test=False):
     return sessionmaker(bind=engine)()
 
 
-sqlite_dbapi = 'sqlite:///'
-postgres_dbapi = 'postgresql+psycopg2:///'
-database_name = 'restaurants'
-test_database = 'rest_test'
-
-# Set this to "True" to use postgresql db or "False" for sqlite local file.
-use_postgresql = True # Boolean
-
-
 def create_all(echo=False, test=False):
     """Adds tables defined above to the database.
     
     Deletes the database if it already exists and creates a new database in
     its place. The tables are defined in file as classes that inherit a
     ``declarative_base()`` instance.
+    
+    :arg boolean echo: Boolean passed to ``create_engine``'s echo arg.
+    :arg boolean test: Boolean to use test database instead of the production one.
     """
     db_name = database_name if not test else test_database
     if use_postgresql:

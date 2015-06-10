@@ -9,7 +9,6 @@ from sqlalchemy.exc import IntegrityError
 from random import sample
 
 
-
 ##############################################################################
 # Decorators
 ##############################################################################
@@ -28,7 +27,6 @@ def check_login_and_csrf_status(func):
             return abort(401)
         return func(*args, **kwargs)
     return wrapper
-
 
 
 ##############################################################################
@@ -77,14 +75,6 @@ def get_items():
         rec = query.first()
         each['rating'] = rec.rating if rec else 0
     return jsonify(items=resp)
-
-
-#@app.route('/get/ratings', methods=['POST'])
-#def get_ratings():
-#    params = request.get_json()
-#    recs = q_Rating().filter_by(id = params['id']).all()
-#    resp = [each.sdict for each in recs]
-#    return jsonify(items=resp)
 
 
 @app.route('/api/restaurants', methods=['GET'])
@@ -210,8 +200,6 @@ def save_rating():
         return jsonify(status='ok')
     
     
-
-
 @app.route('/save/item', methods=['POST'])
 @check_login_and_csrf_status
 def save_item():
@@ -303,7 +291,6 @@ def save_restaurant():
         res.status_code = 500
         return res
     
-
     
 @app.route('/update/restaurant', methods=['POST'])
 @check_login_and_csrf_status
@@ -360,7 +347,6 @@ def delete_restaurant():
         return alert(500) # Internal server error
 
 
-# From a suggestion on http://stackoverflow.com/questions/739993/how-can-i-get-a-list-of-locally-installed-python-modules
 @app.route('/api/environment', methods=['GET'])
 def show_environment():
     """Returns a list of installed packages on the server environment."""

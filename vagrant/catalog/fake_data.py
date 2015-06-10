@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+This file contains fake data adds it to the database.
+"""
 
 from database_setup import *
 
