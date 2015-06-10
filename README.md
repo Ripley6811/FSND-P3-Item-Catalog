@@ -27,6 +27,7 @@ creating the project and API documentation website.
 Author: Jay W Johnson
 
 [Link to GitHub repository](https://github.com/Ripley6811/FSND-P3-Item-Catalog)
+
 [App and API Documentation](http://ripley6811.github.io/FSND-P3-Item-Catalog/vagrant/sphinx_build/html/index.html)
 
 
