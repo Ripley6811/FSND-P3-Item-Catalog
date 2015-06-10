@@ -42,16 +42,19 @@ is running.
 
 8. **Website navigation**
     - The main page is a listing of restaurants. All pages will have a blue button
-    that goes back to the home page restaurant list.
+    that goes back to the home page restaurant list. Blue editing buttons, shown with
+    a pencil image (Glyphicon) appear for each restaurant and each item only if
+    a user is logged in.
     - There is a Google+ signin button at the top-right corner of all pages which 
     changes to a logout button with user photo when logged in. Click this button
     to log in and log out.
     - Click on any restaurant row to view the saved items from that restaurant on another
-    page and lists them along with price, description and the user's critique of the item.
+    page. Displays a list including with price, description and the user's critique of the item.
     - Critique has three choices: A heart means it is a favorite item, thumbs up means it is
     good and might get it again, and a thumbs down means NEVER get it again!
     - Critiques and the ability to add/edit items and restaurants is reserved for 
-    logged in members.
+    logged in members. Look for blue buttons with a pencil image in the item row 
+    when logged in.
 
 8. **Test the application:**
     - Install the **`Flask-Testing`** package with pip in the virtual environment
