@@ -35,19 +35,19 @@ def check_login_and_csrf_status(func):
 # Helper functions for shorthand querying.
 ##############################################################################
 def q_Restaurant():
-    """Return a query object for database Restaurant class."""
+    """Return a new query object for database Restaurant class."""
     return app.db_session.query(Restaurant)
 
 def q_MenuItem():
-    """Return a query object for database MenuItem class."""
+    """Return a new query object for database MenuItem class."""
     return app.db_session.query(MenuItem)
 
-def q_MenuItemRating():
-    """Return a query object for database MenuItemRating class."""
+def q_Rating():
+    """Return a new query object for database MenuItemRating class."""
     return app.db_session.query(MenuItemRating)
 
 def q_User():
-    """Return a query object for database MenuItemRating class."""
+    """Return a new query object for database MenuItemRating class."""
     return app.db_session.query(User)
     
 
@@ -70,34 +70,45 @@ def get_items():
         key=lambda d: (-d['favorite_count'], -d['good_count'], d['bad_count'])
     )
     # Add logged-in user's ratings into the response for display.
-    query = q_MenuItemRating()
     for each in resp:
-        query = query.filter_by(item_id = each['id'], 
-                                user_id = login_session.get('user_id', None))
+        user_id = login_session.get('user_id', None)
+        query = q_Rating().filter_by(item_id = each['id'], 
+                                     user_id = user_id)
         rec = query.first()
         each['rating'] = rec.rating if rec else 0
     return jsonify(items=resp)
 
 
-@app.route('/get/ratings', methods=['POST'])
-def get_ratings():
-    params = request.get_json()
-    recs = q_MenuItemRating().filter_by(id = params['id']).all()
-    resp = [each.sdict for each in recs]
-    return jsonify(items=resp)
+#@app.route('/get/ratings', methods=['POST'])
+#def get_ratings():
+#    params = request.get_json()
+#    recs = q_Rating().filter_by(id = params['id']).all()
+#    resp = [each.sdict for each in recs]
+#    return jsonify(items=resp)
 
 
 @app.route('/api/restaurants', methods=['GET'])
 def api_restaurants():
-    recs = q_Restaurant().all()
+    """Returns a list of restaurants in the database.
+    
+    :returns: JSON with a 'restaurants' key and list of restaurants.
+    """
+    recs = q_Restaurant().order_by('name').all()
     resp = [each.sdict for each in recs]
     return jsonify(status='ok', restaurants=resp)
 
 
 @app.route('/api/users', methods=['GET'])
 def api_users():
+    """Returns a list of users in the database.
+    
+    Email addresses are removed from returned data.
+    
+    :returns: JSON with a 'users' key and list of users.
+    """
     recs = q_User().all()
     resp = [each.sdict for each in recs]
+    [each.pop('email', None) for each in resp]
     return jsonify(status='ok', users=resp)
 
 
@@ -105,16 +116,24 @@ def api_users():
 @app.route('/api/menu/restaurant=<string:name>', methods=['GET'])
 @app.route('/api/menu/restaurant_id=<int:rid>', methods=['GET'])
 def api_menu(name=None, rid=None):
+    """Returns the menu for a restaurant in JSON format.
+    
+    Requires either the name or an database ID number for a restaurant.
+    You can get a list of restaurant names and ID numbers by using 
+    "/api/restaurants".
+    
+    :arg string restaurant: The name of a restaurant to lookup.
+    :arg int restaurant_id: The database ID of a restaurant.
+    :returns: JSON with a 'menu' key and a list of menu items.
+    """
     if 'restaurant_id' in request.args:
         rid = request.args.get('restaurant_id')
     if 'restaurant' in request.args:
         name = request.args.get('restaurant')
     if name:
         try:
-            query = q_Restaurant()
-            restaurant = query.filter_by(name = name).one()
-            query = q_MenuItem()
-            recs = query.filter_by(restaurant_id = restaurant.id)
+            restaurant = q_Restaurant().filter_by(name = name).one()
+            recs = q_MenuItem().filter_by(restaurant_id = restaurant.id)
             recs_json = [each.sdict for each in recs]
             return jsonify(status='ok', menu=recs_json)
         except NoResultFound:
@@ -142,6 +161,7 @@ def get_favorites(user_id=None, limit=3):
     
     :arg optional user_id: ID of user.
     :arg optional limit: Maximum number of items to return.
+    :returns: JSON with an 'items' key and a list of menu items.
     """
     print limit
     if 'limit' in request.args:
@@ -155,7 +175,7 @@ def get_favorites(user_id=None, limit=3):
             resp = jsonify(status='error', error='User not logged in.')
             resp.status_code = 400
             return resp
-    recs = q_MenuItemRating().filter_by(user_id=user_id, rating = 1)
+    recs = q_Rating().filter_by(user_id=user_id, rating = 1)
     count = recs.count()
     recs_json = [each.item.sdict for each in recs]
     return jsonify(items=sample(recs_json, min(limit, count)))
@@ -164,7 +184,10 @@ def get_favorites(user_id=None, limit=3):
 @app.route('/save/rating', methods=['POST'])
 @check_login_and_csrf_status
 def save_rating():
-    """Saves a menu item rating to the database."""
+    """Saves a menu item rating to the database.
+    
+    :Returns: The status of the database submission as JSON.
+    """
     params = request.get_json()
     params.pop('_csrf')
     try:
@@ -174,8 +197,8 @@ def save_rating():
         resp.status_code = 401
         return resp
     try:
-        query = q_MenuItemRating().filter_by(user_id=new_rec.user_id,
-                                             item_id=new_rec.item_id)
+        query = q_Rating().filter_by(user_id=new_rec.user_id,
+                                     item_id=new_rec.item_id)
         rec = query.one()
         if rec:
             rec.rating = new_rec.rating
@@ -197,7 +220,7 @@ def save_item():
     Incoming request data must contain key-value pairs for new item.
     
     :Returns:
-        Response object with id of new menu item record.
+        Response object with id of new menu item record as JSON.
     """
     obj = request.get_json()
     rating = int(obj.pop('rating', 0))
@@ -241,9 +264,8 @@ def update_item():
         app.db_session.commit()
     if rating:
         try:
-            query = q_MenuItemRating()
-            query = query.filter_by(item_id=item['id'],
-                                    user_id=login_session['user_id'])
+            query = q_Rating().filter_by(item_id=item['id'],
+                                         user_id=login_session['user_id'])
             rating_rec = query.one()
             rating_rec.rating = rating
             app.db_session.commit()
@@ -303,7 +325,7 @@ def update_restaurant():
 def delete_item():
     """Deletes an item from the database.
     
-    Return:
+    :Returns:
         Response object with status of 'ok'.
     """
     if 'id' not in request.get_json():
@@ -323,7 +345,7 @@ def delete_item():
 def delete_restaurant():
     """Deletes a restaurant from the database.
     
-    Return:
+    :Returns:
         Response object with status of 'ok'.
     """
     if 'id' not in request.get_json():

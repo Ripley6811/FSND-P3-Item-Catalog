@@ -117,6 +117,8 @@ view_model.get_items = function() {
                           ko.observable(item.favorite_count),
                           ko.observable(item.good_count),
                           ko.observable(item.bad_count)]
+            console.log(ko.toJS(item.tally));
+            console.log(item.rating());
             view_model.food_list.push(item);
         }
     });

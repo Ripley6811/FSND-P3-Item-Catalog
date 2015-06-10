@@ -139,6 +139,59 @@ with page load. Redirects browser to main page if not logged in.</p>
 <div class="section" id="module-catalog.api">
 <span id="api-module"></span><h2>API module<a class="headerlink" href="#module-catalog.api" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="catalog.api.api_menu">
+<code class="descclassname">catalog.api.</code><code class="descname">api_menu</code><span class="sig-paren">(</span><em>name=None</em>, <em>rid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.api_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the menu for a restaurant in JSON format.</p>
+<p>Requires either the name or an database ID number for a restaurant.
+You can get a list of restaurant names and ID numbers by using 
+&#8220;/api/restaurants&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>restaurant</strong> (<em>string</em>) &#8211; The name of a restaurant to lookup.</li>
+<li><strong>restaurant_id</strong> (<em>int</em>) &#8211; The database ID of a restaurant.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">JSON with a &#8216;menu&#8217; key and a list of menu items.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.api_restaurants">
+<code class="descclassname">catalog.api.</code><code class="descname">api_restaurants</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.api_restaurants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of restaurants in the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON with a &#8216;restaurants&#8217; key and list of restaurants.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.api_users">
+<code class="descclassname">catalog.api.</code><code class="descname">api_users</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.api_users" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of users in the database.</p>
+<p>Email addresses are removed from returned data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON with a &#8216;users&#8217; key and list of users.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="catalog.api.check_login_and_csrf_status">
 <code class="descclassname">catalog.api.</code><code class="descname">check_login_and_csrf_status</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.check_login_and_csrf_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for first checking user login state before proceeding
@@ -150,20 +203,28 @@ check fails.</p>
 <dt id="catalog.api.delete_item">
 <code class="descclassname">catalog.api.</code><code class="descname">delete_item</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.delete_item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes an item from the database.</p>
-<dl class="docutils">
-<dt>Return:</dt>
-<dd>Response object with status of &#8216;ok&#8217;.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Response object with status of &#8216;ok&#8217;.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="catalog.api.delete_restaurant">
 <code class="descclassname">catalog.api.</code><code class="descname">delete_restaurant</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.delete_restaurant" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes a restaurant from the database.</p>
-<dl class="docutils">
-<dt>Return:</dt>
-<dd>Response object with status of &#8216;ok&#8217;.</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Response object with status of &#8216;ok&#8217;.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -176,10 +237,13 @@ Returns an error if neither exists.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>user_id</strong> (<em>optional</em>) &#8211; ID of user.</li>
 <li><strong>limit</strong> (<em>optional</em>) &#8211; Maximum number of items to return.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">JSON with an &#8216;items&#8217; key and a list of menu items.</p>
 </td>
 </tr>
 </tbody>
@@ -201,8 +265,8 @@ to number of &#8216;dislike&#8217; ratings.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="catalog.api.q_MenuItemRating">
-<code class="descclassname">catalog.api.</code><code class="descname">q_MenuItemRating</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.q_MenuItemRating" title="Permalink to this definition">¶</a></dt>
+<dt id="catalog.api.q_Rating">
+<code class="descclassname">catalog.api.</code><code class="descname">q_Rating</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.q_Rating" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a query object for database MenuItemRating class.</p>
 </dd></dl>
 
@@ -227,7 +291,7 @@ to number of &#8216;dislike&#8217; ratings.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Response object with id of new menu item record.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Response object with id of new menu item record as JSON.</td>
 </tr>
 </tbody>
 </table>
@@ -237,6 +301,14 @@ to number of &#8216;dislike&#8217; ratings.</p>
 <dt id="catalog.api.save_rating">
 <code class="descclassname">catalog.api.</code><code class="descname">save_rating</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.save_rating" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves a menu item rating to the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The status of the database submission as JSON.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">

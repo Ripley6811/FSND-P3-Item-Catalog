@@ -27,7 +27,7 @@ class MyTestCase(TestCase):
         db.drop_all(test=True)
 
 
-class TestPageLoading(MyTestCase):
+class TestPageLoadingAndRedirect(MyTestCase):
     
     def test_main_page_load(self):
         response = self.client.get("/")
@@ -38,19 +38,21 @@ class TestPageLoading(MyTestCase):
         self.assertRedirects(response, '/')
 
     def test_no_login_add_menu_item(self):
-        response = self.client.get('/new/item/1/')
+        response = self.client.get('/new/item/1')
         self.assertRedirects(response, '/')
 
         
 class TestJSONResponse(MyTestCase):
     
     def test_some_json(self):
-        response = self.client.get("/environment")
+        response = self.client.get("/api/environment")
         self.assertIsInstance(response.json, dict)
         self.assertIn('installed_packages', response.json)
         
 
-class TestDatabase(MyTestCase):
+class TestNoLoginResponses(MyTestCase):
+    """Test methods that do not require login."""
+    
     r_data = dict(
         name= 'Area Critters',
         phone= '555-12345',
@@ -62,65 +64,71 @@ class TestDatabase(MyTestCase):
         price = '15.99',
         course = 'Entree',
     )
-    
-    def test_add_restaurant(self):
-        # Insert record must return status 200 if successful.
+
+    def test_add_restaurant_without_login(self):
+        # Insert record must return status 401 if not logged in.
         response = self.client.post('/save/restaurant', 
                                     data=json.dumps(self.r_data), 
                                     content_type='application/json')
-        self.assert200(response, 'Save restaurant data post error')
-        # Retrieve list of restuarants must have 1 record.
-        response = self.client.post('/get/restaurants',
-                                    content_type='application/json')
-        self.assert200(response, 'Get restaurant json list error')
-        self.assertEquals(len(response.json['restaurants']), 1)
-        # Restaurant record data must match original data.
-        r0 = response.json['restaurants'][0]
-        self.assertIsInstance(r0.pop('id'), int)
-        self.assertDictContainsSubset(self.r_data, r0)
-        
-    def test_add_bad_restaurant(self):
-        # Insert record must return status 500 if failure.
-        r_baddata = self.r_data.copy()
-        r_baddata.pop('name')
-        response = self.client.post('/save/restaurant', 
-                                    data=json.dumps(r_baddata), 
-                                    content_type='application/json')
-        self.assert500(response, 'Save restaurant data post did not fail')
+        self.assert401(response, 'Save restaurant data post error')
     
-    def test_add_menu_item_sans_userlogin(self):
+    def test_add_menu_item_without_login(self):
         response = self.client.post('/save/item', 
                                     data=json.dumps(self.mi_baddata), 
                                     content_type='application/json')
         self.assert401(response, 'Did not return 401')
         
-    def test_add_menu_item_with_restaurant(self):
-        # Add restaurant
-        response = self.client.post('/save/restaurant', 
-                                    data=json.dumps(self.r_data), 
-                                    content_type='application/json')
-        self.assert200(response, 'Save restaurant data post error')
-        # Create good menu entry with `id` from previous response.
-        mi_data = self.mi_baddata
-        restaurant_id = response.json['id']
-        mi_data['restaurant_id'] = restaurant_id
-        # Insert new menu item record.
-        response = self.client.post('/save/item', 
-                                    data=json.dumps(self.mi_baddata), 
-                                    content_type='application/json')
-        self.assert200(response, 'Did not return successful status code')
-        # Retrieve list of menu items for restaurant.
-        response = self.client.post('/get/items',
-                                    data=json.dumps({'id': restaurant_id}),
-                                    content_type='application/json')
-        self.assert200(response, 'Get menu item json list error')
-        self.assertEquals(len(response.json['items']), 1)
-        r0 = response.json['items'][0]
-        # Pop and check attributes that the database added.
-        self.assertIsInstance(r0.pop('id'), int)
-        self.assertIsInstance(r0.pop('restaurant_name'), unicode)
-        # Compare other data with original data.
-        self.assertDictContainsSubset(mi_data, r0)
+#class TestWithLoginResponses(MyTestCase):
+#    """Test methods that require a logged in user."""
+#
+#    r_data = dict(
+#        name= 'Area Critters',
+#        phone= '555-12345',
+#        note= "I'm a note"
+#    )
+#    mi_baddata = dict(
+#        name = 'Chicken Curry',
+#        description = 'In pesto sauce',
+#        price = '15.99',
+#        course = 'Entree',
+#    )
+#        
+#    def test_add_bad_restaurant(self):
+#        # Insert record must return status 500 if failure.
+#        r_baddata = self.r_data.copy()
+#        r_baddata.pop('name')
+#        response = self.client.post('/save/restaurant', 
+#                                    data=json.dumps(r_baddata), 
+#                                    content_type='application/json')
+#        self.assert500(response, 'Save restaurant data post did not fail')
+#    
+#    def test_add_menu_item_with_restaurant(self):
+#        # Add restaurant
+#        response = self.client.post('/save/restaurant', 
+#                                    data=json.dumps(self.r_data), 
+#                                    content_type='application/json')
+#        self.assert200(response, 'Save restaurant data post error')
+#        # Create good menu entry with `id` from previous response.
+#        mi_data = self.mi_baddata
+#        restaurant_id = response.json['id']
+#        mi_data['restaurant_id'] = restaurant_id
+#        # Insert new menu item record.
+#        response = self.client.post('/save/item', 
+#                                    data=json.dumps(self.mi_baddata), 
+#                                    content_type='application/json')
+#        self.assert200(response, 'Did not return successful status code')
+#        # Retrieve list of menu items for restaurant.
+#        response = self.client.post('/get/items',
+#                                    data=json.dumps({'id': restaurant_id}),
+#                                    content_type='application/json')
+#        self.assert200(response, 'Get menu item json list error')
+#        self.assertEquals(len(response.json['items']), 1)
+#        r0 = response.json['items'][0]
+#        # Pop and check attributes that the database added.
+#        self.assertIsInstance(r0.pop('id'), int)
+#        self.assertIsInstance(r0.pop('restaurant_name'), unicode)
+#        # Compare other data with original data.
+#        self.assertDictContainsSubset(mi_data, r0)
         
         
 class MyLiveTest(LiveServerTestCase):
