@@ -118,7 +118,7 @@
       <span class="nt">&quot;bad_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
       <span class="nt">&quot;course&quot;</span><span class="p">:</span> <span class="s2">&quot;Entree&quot;</span><span class="p">,</span>
       <span class="nt">&quot;created_by&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-      <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;a Vietnamese noodle soup consisting of broth, linguine-shaped rice noodles called banh pho, a few herbs, and meat.&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;a Vietnamese noodle soup.&quot;</span><span class="p">,</span>
       <span class="nt">&quot;favorite_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
       <span class="nt">&quot;good_count&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
       <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
@@ -139,14 +139,62 @@
 </dd></dl>
 
 </div>
+<div class="section" id="get-list-of-users">
+<h2>Get list of users<a class="headerlink" href="#get-list-of-users" title="Permalink to this headline">¶</a></h2>
+<dl class="get">
+<dt id="get--api-users">
+<code class="descname">GET </code><code class="descname">/api/users</code><a class="headerlink" href="#get--api-users" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of users from the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authentication:</th><td class="field-body"><p class="first">Not required.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Response:</th><td class="field-body"><p class="first">JSON</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"><div class="first last highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;ok&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;users&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;b.white@gmail.com&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Barry White&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;picture&quot;</span><span class="p">:</span> <span class="s2">&quot;https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlHU4qMDG0Ln9LfgRJre4CYAt-KvHr3GQD3EJQqNd93n-2mpvIWA&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;b.white@yahoo.com&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Betty White&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;picture&quot;</span><span class="p">:</span> <span class="s2">&quot;http://borderlessnewsandviews.com/wp-content/uploads/2012/05/Betty-white.jpg&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;e.white@aol.com&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+      <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;E. B. White&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;picture&quot;</span><span class="p">:</span> <span class="s2">&quot;https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcS1Z80NlvDZ-sBs2i9hCviJf3-eXH0kCi5s3K6Zk366Q_ZJr1Rl&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 <div class="section" id="get-list-of-favorites">
 <h2>Get list of favorites<a class="headerlink" href="#get-list-of-favorites" title="Permalink to this headline">¶</a></h2>
 <dl class="get">
 <dt id="get--api-favorites">
 <code class="descname">GET </code><code class="descname">/api/favorites</code><a class="headerlink" href="#get--api-favorites" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets a random list of three of a user&#8217;s favorited items.
+<dd><p>Gets a random list of a user&#8217;s favorited items.
 Pass a <em>user_id</em> as a parameter or default to the currently logged in user.
-Returns an error if neither is found.</p>
+Returns an error if neither is found. The default <em>limit</em> is three.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -156,6 +204,7 @@ Returns an error if neither is found.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>user_id</strong> (<em>optional</em>) &#8211; ID of user.</li>
+<li><strong>limit</strong> (<em>optional</em>) &#8211; Max number of items to return.</li>
 </ul>
 </td>
 </tr>
@@ -214,6 +263,45 @@ Returns an error if neither is found.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="get-list-of-vm-packages">
+<h2>Get list of VM packages<a class="headerlink" href="#get-list-of-vm-packages" title="Permalink to this headline">¶</a></h2>
+<dl class="get">
+<dt id="get--api-environment">
+<code class="descname">GET </code><code class="descname">/api/environment</code><a class="headerlink" href="#get--api-environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a listing of installed packages and version numbers from server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authentication:</th><td class="field-body"><p class="first">Not required.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Response:</th><td class="field-body"><p class="first">JSON</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"><div class="first last highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;installed_packages&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;alabaster == 0.7.4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;apt-xapian-index == 0.45&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;argparse == 1.2.1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;babel == 1.3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;bleach == 1.4.1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;blinker == 1.3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;chardet == 2.0.1&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cheetah == 2.4.4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cloud-init == 0.7.5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;...&quot;</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -227,7 +315,9 @@ Returns an error if neither is found.</p>
 <li><a class="reference internal" href="#">API Reference</a><ul>
 <li><a class="reference internal" href="#get-list-of-restaurants">Get list of restaurants</a></li>
 <li><a class="reference internal" href="#get-restaurant-menu">Get restaurant menu</a></li>
+<li><a class="reference internal" href="#get-list-of-users">Get list of users</a></li>
 <li><a class="reference internal" href="#get-list-of-favorites">Get list of favorites</a></li>
+<li><a class="reference internal" href="#get-list-of-vm-packages">Get list of VM packages</a></li>
 </ul>
 </li>
 </ul>

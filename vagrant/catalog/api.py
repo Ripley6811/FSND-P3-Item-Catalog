@@ -13,7 +13,7 @@ from random import sample
 ##############################################################################
 # Decorators
 ##############################################################################
-def authorize(func):
+def check_login_and_csrf_status(func):
     """Decorator for first checking user login state before proceeding
     with function. Returns 401 unauthorized error if not logged in or csrf
     check fails.
@@ -28,6 +28,27 @@ def authorize(func):
             return abort(401)
         return func(*args, **kwargs)
     return wrapper
+
+
+
+##############################################################################
+# Helper functions for shorthand querying.
+##############################################################################
+def q_Restaurant():
+    """Return a query object for database Restaurant class."""
+    return app.db_session.query(Restaurant)
+
+def q_MenuItem():
+    """Return a query object for database MenuItem class."""
+    return app.db_session.query(MenuItem)
+
+def q_MenuItemRating():
+    """Return a query object for database MenuItemRating class."""
+    return app.db_session.query(MenuItemRating)
+
+def q_User():
+    """Return a query object for database MenuItemRating class."""
+    return app.db_session.query(User)
     
 
 ##############################################################################
@@ -41,18 +62,19 @@ def get_items():
     to number of 'dislike' ratings.
     """
     params = request.get_json()
-    restaurant = app.db_session.query(Restaurant).filter_by(id = params['id']).first()
-    recs = app.db_session.query(MenuItem).filter_by(restaurant_id = params['id'])
+    restaurant = q_Restaurant().filter_by(id = params['id']).first()
+    recs = q_MenuItem().filter_by(restaurant_id = params['id'])
     # Order menu items by their popularity.
     resp = sorted(
         [each.sdict for each in recs], 
         key=lambda d: (-d['favorite_count'], -d['good_count'], d['bad_count'])
     )
     # Add logged-in user's ratings into the response for display.
-    query = app.db_session.query(MenuItemRating)
+    query = q_MenuItemRating()
     for each in resp:
-        rec = query.filter_by(item_id = each['id'], 
-                              user_id = login_session.get('user_id', None)).first()
+        query = query.filter_by(item_id = each['id'], 
+                                user_id = login_session.get('user_id', None))
+        rec = query.first()
         each['rating'] = rec.rating if rec else 0
     return jsonify(items=resp)
 
@@ -60,16 +82,23 @@ def get_items():
 @app.route('/get/ratings', methods=['POST'])
 def get_ratings():
     params = request.get_json()
-    recs = app.db_session.query(MenuItemRating).filter_by(id = params['id']).all()
+    recs = q_MenuItemRating().filter_by(id = params['id']).all()
     resp = [each.sdict for each in recs]
     return jsonify(items=resp)
 
 
 @app.route('/api/restaurants', methods=['GET'])
 def api_restaurants():
-    recs = app.db_session.query(Restaurant).all()
+    recs = q_Restaurant().all()
     resp = [each.sdict for each in recs]
     return jsonify(status='ok', restaurants=resp)
+
+
+@app.route('/api/users', methods=['GET'])
+def api_users():
+    recs = q_User().all()
+    resp = [each.sdict for each in recs]
+    return jsonify(status='ok', users=resp)
 
 
 @app.route('/api/menu', methods=['GET'])
@@ -82,35 +111,43 @@ def api_menu(name=None, rid=None):
         name = request.args.get('restaurant')
     if name:
         try:
-            restaurant = app.db_session.query(Restaurant).filter_by(name = name).one()
-            recs = app.db_session.query(MenuItem).filter_by(restaurant_id = restaurant.id)
+            query = q_Restaurant()
+            restaurant = query.filter_by(name = name).one()
+            query = q_MenuItem()
+            recs = query.filter_by(restaurant_id = restaurant.id)
             recs_json = [each.sdict for each in recs]
             return jsonify(status='ok', menu=recs_json)
         except NoResultFound:
             return jsonify(status='error', error='Restaurant not found.')
         except MultipleResultsFound:
-            return jsonify(status='error', error='Multiple restaurants found. Use ID instead of name.')
+            return jsonify(status='error', 
+                error='Multiple restaurants found. Use ID instead of name.')
     elif rid != None:
-        recs = app.db_session.query(MenuItem).filter_by(restaurant_id = rid)
+        recs = q_MenuItem().filter_by(restaurant_id = rid)
         recs_json = [each.sdict for each in recs]
         if len(recs_json) > 0:
             return jsonify(status='ok', menu=recs_json)
         else:
             return jsonify(status='error', error='Menu items not found.')
-    return jsonify(status='error', error='ID or name parameter not found in database')
+    return jsonify(status='error', 
+                   error='ID or name parameter not found in database')
 
 
 @app.route('/api/favorites', methods=['GET', 'POST'])
-def get_favorites(user_id=None):
+def get_favorites(user_id=None, limit=3):
     """Returns three random favorited menu items.
     
     Pass a user_id as a parameter or default to the currently logged in user.
     Returns an error if neither exists.
     
     :arg optional user_id: ID of user.
+    :arg optional limit: Maximum number of items to return.
     """
+    print limit
+    if 'limit' in request.args:
+        limit = int(request.args.get('limit'))
     if 'user_id' in request.args:
-        user_id = request.args.get('user_id')
+        user_id = int(request.args.get('user_id'))
     else:
         try:
             user_id = login_session['user_id']
@@ -118,15 +155,14 @@ def get_favorites(user_id=None):
             resp = jsonify(status='error', error='User not logged in.')
             resp.status_code = 400
             return resp
-    q = app.db_session.query(MenuItemRating)
-    recs = q.filter_by(user_id=user_id, rating = 1)
+    recs = q_MenuItemRating().filter_by(user_id=user_id, rating = 1)
     count = recs.count()
     recs_json = [each.item.sdict for each in recs]
-    return jsonify(items=sample(recs_json, min(3, count)))
+    return jsonify(items=sample(recs_json, min(limit, count)))
 
 
 @app.route('/save/rating', methods=['POST'])
-@authorize
+@check_login_and_csrf_status
 def save_rating():
     """Saves a menu item rating to the database."""
     params = request.get_json()
@@ -138,8 +174,9 @@ def save_rating():
         resp.status_code = 401
         return resp
     try:
-        rec = app.db_session.query(MenuItemRating).filter_by(user_id=new_rec.user_id,
-                                                      item_id=new_rec.item_id).one()
+        query = q_MenuItemRating().filter_by(user_id=new_rec.user_id,
+                                             item_id=new_rec.item_id)
+        rec = query.one()
         if rec:
             rec.rating = new_rec.rating
             app.db_session.commit()
@@ -153,7 +190,7 @@ def save_rating():
 
 
 @app.route('/save/item', methods=['POST'])
-@authorize
+@check_login_and_csrf_status
 def save_item():
     """Saves new food item to the database.
     
@@ -178,18 +215,19 @@ def save_item():
         return jsonify(status='ok', id=new_rec.id)
     except IntegrityError as e:
         app.db_session.rollback()
-        resp = jsonify(status='error', error=e.orig.pgerror) # Internal server error
+        resp = jsonify(status='error', error=e.orig.pgerror)
         resp.status_code = 500
         return resp
     except KeyError:
         app.db_session.rollback()
-        resp = jsonify(status='error', error='Must be logged in to make changes to the database.')
+        resp = jsonify(status='error', 
+                       error='Must be logged in to make database changes.')
         resp.status_code = 401
         return resp
 
     
 @app.route('/update/item', methods=['POST'])
-@authorize
+@check_login_and_csrf_status
 def update_item():
     """Saves changes to an existing item.
     
@@ -199,13 +237,14 @@ def update_item():
     item = obj.pop('item')
     rating = int(obj.pop('rating', 0))
     if item.get('id', None):
-        app.db_session.query(MenuItem).filter_by(id=item['id']).update(item)
+        q_MenuItem().filter_by(id=item['id']).update(item)
         app.db_session.commit()
     if rating:
         try:
-            rating_rec = app.db_session.query(MenuItemRating) \
-                                   .filter_by(item_id=item['id'],
-                                              user_id=login_session['user_id']).one()
+            query = q_MenuItemRating()
+            query = query.filter_by(item_id=item['id'],
+                                    user_id=login_session['user_id'])
+            rating_rec = query.one()
             rating_rec.rating = rating
             app.db_session.commit()
         except NoResultFound:
@@ -218,7 +257,7 @@ def update_item():
 
 
 @app.route('/save/restaurant', methods=['POST'])
-@authorize
+@check_login_and_csrf_status
 def save_restaurant():
     """Saves new restaurant to the database.
     
@@ -235,16 +274,32 @@ def save_restaurant():
         app.db_session.add(new_rec)
         app.db_session.flush()
         app.db_session.commit()
+        return jsonify(status='ok', id=new_rec.id)
     except IntegrityError:
         app.db_session.rollback()
         res = jsonify(error='Menu item save failed') # Internal server error
         res.status_code = 500
         return res
-    return jsonify(status='ok', id=new_rec.id)
+    
+
+    
+@app.route('/update/restaurant', methods=['POST'])
+@check_login_and_csrf_status
+def update_restaurant():
+    """Saves changes to an existing restaurant.
+    
+    :Returns: JSON with status of 'ok' or 'error' and message.
+    """
+    obj = request.get_json()
+    item = obj.pop('restaurant')
+    if item.get('id', None):
+        q_Restaurant().filter_by(id=item['id']).update(item)
+        app.db_session.commit()
+        return jsonify(status='ok', id=item['id'])
 
 
 @app.route('/delete/item', methods=['POST'])
-@authorize
+@check_login_and_csrf_status
 def delete_item():
     """Deletes an item from the database.
     
@@ -254,7 +309,7 @@ def delete_item():
     if 'id' not in request.get_json():
         return alert(400)
     try:
-        record = app.db_session.query(MenuItem).get(request.get_json()['id'])
+        record = q_MenuItem().get(request.get_json()['id'])
         app.db_session.delete(record)
         app.db_session.commit()
         return jsonify(status='ok')
@@ -264,7 +319,7 @@ def delete_item():
     
 
 @app.route('/delete/restaurant', methods=['POST'])
-@authorize
+@check_login_and_csrf_status
 def delete_restaurant():
     """Deletes a restaurant from the database.
     
@@ -274,7 +329,7 @@ def delete_restaurant():
     if 'id' not in request.get_json():
         return alert(400)
     try:
-        record = app.db_session.query(Restaurant).get(request.get_json()['id'])
+        record = q_Restaurant().get(request.get_json()['id'])
         app.db_session.delete(record)
         app.db_session.commit()
         return jsonify(status='ok', url=url_for('restaurants'))
@@ -284,7 +339,7 @@ def delete_restaurant():
 
 
 # From a suggestion on http://stackoverflow.com/questions/739993/how-can-i-get-a-list-of-locally-installed-python-modules
-@app.route('/environment')
+@app.route('/api/environment', methods=['GET'])
 def show_environment():
     """Returns a list of installed packages on the server environment."""
     installed_packages = pip.get_installed_distributions()

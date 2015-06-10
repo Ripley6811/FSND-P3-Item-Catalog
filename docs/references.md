@@ -23,6 +23,7 @@
 ***Jinja.pocoo.org***
 
 - [How to use templates](http://jinja.pocoo.org/docs/dev/templates/)
+- [How to replace and escape characters](http://jinja.pocoo.org/docs/dev/templates/#replace)
 
 
 

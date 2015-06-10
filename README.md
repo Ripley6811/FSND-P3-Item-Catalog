@@ -21,6 +21,9 @@ It was built using the Flask microframework connected to a PostgreSQL database,
 the KnockoutJS MVVM for a dynamic front-end, and Google+ third-party login
 system (OAuth2).
 
+Grunt-Readme was used to generate the README from templates. Sphinx for 
+creating the project and API documentation website.
+
 Author: Jay W Johnson
 
 [Link to GitHub repository](https://github.com/Ripley6811/FSND-P3-Item-Catalog)
@@ -38,13 +41,24 @@ Author: Jay W Johnson
 
 
 ## File List
-***`app.py`*** - Main program that runs the server side operations.
+***`catalog_app.py`*** - Main program that runs the server side operations.
 
-***`database_setup.py`*** - When running this file, it deletes an existing database
+***`catalog/__init__.py`*** - Package init file.
+
+***`catalog/api.py`*** - Flask routing methods that return JSON data.
+
+***`catalog/signin.py`*** - Flask routing methods for handling signin and signout
+from Google+ and returns JSON data.
+
+***`catalog/views.py`*** - Flask routing methods that return HTML pages.
+
+***`catalog/database_setup.py`*** - When running this file, it deletes an existing database
 and builds a new database with empty tables. Contains the database table information
 and a method for getting a connection (`get_database_session()`).
 
-***`fake_data.py`*** - Run this file to fill the database with fictional sample data.
+***`catalog/fake_data.py`*** - Run this file to fill the database with fictional sample data.
+
+***`catalog_app_test.py`*** - Test suite for **catalog_app**.
 
 ***`static/js/ajax.js`*** - Contains a javascript method that simplifies a POST request.
 
@@ -53,8 +67,19 @@ and a method for getting a connection (`get_database_session()`).
 ***`templates/`*** - The `base.html` file contains the head and html code used by all
 other files.  Other `*.html` files are inserted as the body to the `base.html` file.
 
-***`website_mockup`*** - Sample pages from the application showing what it would
-look like with a server connection.
+***`website_mockup/`*** - Sample pages from the application saved as static
+pages showing what the site would look like with a server connection.
+
+***`*.rst`*** - *reStructuredText* files used in Sphinx documentation.
+
+***`conf.py`*** - Configuration file for Sphinx documentation program.
+
+***`make.bat`*** - Batch file for executing Sphinx documenting program.
+
+***`sphinx_build/`*** - Contains the compiled documentation website.
+
+***`clientsecrets.json`*** - File containing app authentication data for communicating
+with the Google+ API.
 
 
 ## Instructions
@@ -131,17 +156,23 @@ is running.
 - [Credentials not serializable error fix](http://stackoverflow.com/questions/22915461/google-login-server-side-flow-storing-credentials-python-examples/22930708#22930708)
 - [How to return a list of python packages installed on a server](http://stackoverflow.com/questions/739993/how-can-i-get-a-list-of-locally-installed-python-modules)
 - [How to serialize SQLAlchemy row data](http://stackoverflow.com/questions/5022066/how-to-serialize-sqlalchemy-result-to-json)
-
+- [SQL multi-column composite uniqueness](http://stackoverflow.com/a/10061143/1172891)
 
 ***SQLAlchemy.org***
 
 - [Connecting and using PostgreSQL](http://docs.sqlalchemy.org/en/rel_1_0/dialects/postgresql.html?highlight=postgresql#dialect-postgresql)
 
 
+***Flask.pocoo.org***
+
+- [How to organize a bigger app](http://flask.pocoo.org/docs/0.10/patterns/packages/)
+- [Log in decorator needs 'wraps'](http://flask.pocoo.org/docs/0.10/patterns/viewdecorators/)
+
 
 ***Jinja.pocoo.org***
 
 - [How to use templates](http://jinja.pocoo.org/docs/dev/templates/)
+- [How to replace and escape characters](http://jinja.pocoo.org/docs/dev/templates/#replace)
 
 
 
@@ -188,6 +219,26 @@ is running.
 ***Blog posts***
 
 - [How to set headers in a testing post with JSON data](http://hairycode.org/2014/01/18/api-testing-with-flask-post/)
+
+
+***W3Schools.com***
+
+- [How to use and delete cookies](http://www.w3schools.com/js/js_cookies.asp)
+
+
+***Sphinx-doc.org***
+
+- [Getting started with Sphinx documentation](http://sphinx-doc.org/tutorial.html)
+- [reStructuredText guide](http://sphinx-doc.org/rest.html)
+
+***Docs.Python.org***
+
+- [unittest assert-methods](https://docs.python.org/2/library/unittest.html#assert-methods)
+
+
+***Sphinxcontrib***
+
+- [Documenting RESTful HTTP APIs](https://pythonhosted.org/sphinxcontrib-httpdomain/)
 
 
 

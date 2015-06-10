@@ -24,7 +24,7 @@
                 <label>Item Price</label>
                 <div class="input-group">
                     <div class="input-group-addon">$</div>
-                    <input type="text" class="form-control" data-bind="textInput: price">
+                    <input type="text" maxlength=7 class="form-control" data-bind="textInput: price">
                 </div>
             </div>
             <div class="form-group">
@@ -52,24 +52,24 @@ view_model.restaurant = {{ restaurant|tojson }};
  * KO observable model for new item.
  */
 view_model.current_item = {
-    name: ko.observable('{{ item.name }}'),
-    description: ko.observable('{{ item.description }}'),
-    price: ko.observable('{{ item.price }}'),
-    course: ko.observable('{{ item.course }}'),
+    name: ko.observable('{{ item.name|replace("'", "\\'")|safe }}'),
+    description: ko.observable('{{ item.description|replace("'", "\\'")|safe }}'),
+    price: ko.observable('{{ item.price|replace("'", "\\'")|safe }}'),
+    course: ko.observable('{{ item.course|replace("'", "\\'")|safe }}'),
     restaurant_id: view_model.restaurant.id,
 };
-view_model.item_rating = ko.observable('{{ rating }}');
+view_model.item_rating = ko.observable(parseInt('{{ rating|replace("'", "\\'")|safe }}'));
 
 /**
  * Add item id to current_item if it is supplied.
  */
-var item_id = parseInt('{{ item.id }}');
+var item_id = parseInt('{{ item.id|replace("'", "\\'")|safe }}');
 if (!isNaN(item_id)) {
     view_model.current_item.id = item_id;
 }
 
 /**
- * Send data to server for saving.
+ * Send data to server for saving or updating.
  */
 view_model.submit = function() {
     // Convert current_item KO model to serializable object.
@@ -96,7 +96,7 @@ view_model.submit = function() {
 };
 
 /**
- * Delete item
+ * Delete item from database.
  */
 view_model.del = function() {
     var c = confirm("Are you sure you want to delete this menu item?");

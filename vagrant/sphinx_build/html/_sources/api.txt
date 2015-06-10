@@ -1,6 +1,7 @@
 API Reference
 =============
 
+
 Get list of restaurants
 -----------------------
 .. http:get:: /api/restaurants
@@ -46,7 +47,7 @@ Get restaurant menu
                   "bad_count": 0,
                   "course": "Entree",
                   "created_by": 1,
-                  "description": "a Vietnamese noodle soup consisting of broth, linguine-shaped rice noodles called banh pho, a few herbs, and meat.",
+                  "description": "a Vietnamese noodle soup.",
                   "favorite_count": 0,
                   "good_count": 0,
                   "id": 16,
@@ -58,18 +59,55 @@ Get restaurant menu
               ],
               "status": "ok"
             }
+    
+Get list of users
+-------------------
+.. http:get:: /api/users
+
+    Get a list of users from the database.
+
+    :Authentication: Not required.
+    :response: JSON
+    :example:
+        
+        .. sourcecode:: json
+        
+            {
+              "status": "ok",
+              "users": [
+                {
+                  "email": "b.white@gmail.com",
+                  "id": 1,
+                  "name": "Barry White",
+                  "picture": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlHU4qMDG0Ln9LfgRJre4CYAt-KvHr3GQD3EJQqNd93n-2mpvIWA"
+                },
+                {
+                  "email": "b.white@yahoo.com",
+                  "id": 2,
+                  "name": "Betty White",
+                  "picture": "http://borderlessnewsandviews.com/wp-content/uploads/2012/05/Betty-white.jpg"
+                },
+                {
+                  "email": "e.white@aol.com",
+                  "id": 3,
+                  "name": "E. B. White",
+                  "picture": "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcS1Z80NlvDZ-sBs2i9hCviJf3-eXH0kCi5s3K6Zk366Q_ZJr1Rl"
+                }
+              ]
+            }
         
 Get list of favorites
 ---------------------
 .. http:get:: /api/favorites
 
-    Gets a random list of three of a user's favorited items.    
+    Gets a random list of a user's favorited items.    
     Pass a *user_id* as a parameter or default to the currently logged in user.
-    Returns an error if neither is found.
+    Returns an error if neither is found. The default *limit* is three.
     
 
     :Authentication: Optional.
     :arg optional user_id: ID of user.
+    :arg optional limit: Max number of items to return.
     :Response:  JSON
     :example:
         
@@ -119,3 +157,31 @@ Get list of favorites
               ]
             }
         
+        
+Get list of VM packages
+------------------------------------
+.. http:get:: /api/environment
+
+    Gets a listing of installed packages and version numbers from server.
+    
+    :Authentication: Not required.
+    :Response:  JSON
+    :example:
+        
+        .. sourcecode:: json
+        
+            {
+              "installed_packages": [
+                "alabaster == 0.7.4",
+                "apt-xapian-index == 0.45",
+                "argparse == 1.2.1",
+                "babel == 1.3",
+                "bleach == 1.4.1",
+                "blinker == 1.3",
+                "chardet == 2.0.1",
+                "cheetah == 2.4.4",
+                "cloud-init == 0.7.5",
+                "..."
+              ]
+            }
+                

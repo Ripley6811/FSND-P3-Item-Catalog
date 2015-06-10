@@ -139,8 +139,8 @@ with page load. Redirects browser to main page if not logged in.</p>
 <div class="section" id="module-catalog.api">
 <span id="api-module"></span><h2>API module<a class="headerlink" href="#module-catalog.api" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="catalog.api.authorize">
-<code class="descclassname">catalog.api.</code><code class="descname">authorize</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.authorize" title="Permalink to this definition">¶</a></dt>
+<dt id="catalog.api.check_login_and_csrf_status">
+<code class="descclassname">catalog.api.</code><code class="descname">check_login_and_csrf_status</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.check_login_and_csrf_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for first checking user login state before proceeding
 with function. Returns 401 unauthorized error if not logged in or csrf
 check fails.</p>
@@ -168,7 +168,7 @@ check fails.</p>
 
 <dl class="function">
 <dt id="catalog.api.get_favorites">
-<code class="descclassname">catalog.api.</code><code class="descname">get_favorites</code><span class="sig-paren">(</span><em>user_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.get_favorites" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">catalog.api.</code><code class="descname">get_favorites</code><span class="sig-paren">(</span><em>user_id=None</em>, <em>limit=3</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.get_favorites" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns three random favorited menu items.</p>
 <p>Pass a user_id as a parameter or default to the currently logged in user.
 Returns an error if neither exists.</p>
@@ -176,7 +176,11 @@ Returns an error if neither exists.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user_id</strong> (<em>optional</em>) &#8211; ID of user.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user_id</strong> (<em>optional</em>) &#8211; ID of user.</li>
+<li><strong>limit</strong> (<em>optional</em>) &#8211; Maximum number of items to return.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -188,6 +192,30 @@ Returns an error if neither exists.</p>
 <dd><p>Returns a list of all menu items for a restaurant.</p>
 <p>Items are sorted by overall popularity: number of &#8216;favorite&#8217; ratings down
 to number of &#8216;dislike&#8217; ratings.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.q_MenuItem">
+<code class="descclassname">catalog.api.</code><code class="descname">q_MenuItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.q_MenuItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a query object for database MenuItem class.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.q_MenuItemRating">
+<code class="descclassname">catalog.api.</code><code class="descname">q_MenuItemRating</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.q_MenuItemRating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a query object for database MenuItemRating class.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.q_Restaurant">
+<code class="descclassname">catalog.api.</code><code class="descname">q_Restaurant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.q_Restaurant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a query object for database Restaurant class.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.q_User">
+<code class="descclassname">catalog.api.</code><code class="descname">q_User</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.q_User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a query object for database MenuItemRating class.</p>
 </dd></dl>
 
 <dl class="function">
@@ -236,6 +264,20 @@ to number of &#8216;dislike&#8217; ratings.</p>
 <dt id="catalog.api.update_item">
 <code class="descclassname">catalog.api.</code><code class="descname">update_item</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.update_item" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves changes to an existing item.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON with status of &#8216;ok&#8217; or &#8216;error&#8217; and message.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.api.update_restaurant">
+<code class="descclassname">catalog.api.</code><code class="descname">update_restaurant</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.update_restaurant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves changes to an existing restaurant.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
