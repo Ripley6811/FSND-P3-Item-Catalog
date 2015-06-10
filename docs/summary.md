@@ -15,3 +15,4 @@ creating the project and API documentation website.
 Author: {%= author %}
 
 [Link to GitHub repository]({%= homepage %})
+[App and API Documentation](http://ripley6811.github.io/FSND-P3-Item-Catalog/vagrant/sphinx_build/html/index.html)

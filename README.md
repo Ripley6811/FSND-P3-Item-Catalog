@@ -27,6 +27,7 @@ creating the project and API documentation website.
 Author: Jay W Johnson
 
 [Link to GitHub repository](https://github.com/Ripley6811/FSND-P3-Item-Catalog)
+[App and API Documentation](http://ripley6811.github.io/FSND-P3-Item-Catalog/vagrant/sphinx_build/html/index.html)
 
 
 ## Required Packages
@@ -157,6 +158,7 @@ is running.
 - [How to return a list of python packages installed on a server](http://stackoverflow.com/questions/739993/how-can-i-get-a-list-of-locally-installed-python-modules)
 - [How to serialize SQLAlchemy row data](http://stackoverflow.com/questions/5022066/how-to-serialize-sqlalchemy-result-to-json)
 - [SQL multi-column composite uniqueness](http://stackoverflow.com/a/10061143/1172891)
+- [How to get Sphinx documentation to load resources properly on Github pages](http://stackoverflow.com/a/24088631/1172891)
 
 ***SQLAlchemy.org***
 
