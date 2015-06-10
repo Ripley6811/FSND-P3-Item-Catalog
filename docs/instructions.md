@@ -41,13 +41,16 @@ VM prompt. Navigate to the `/vagrant/catalog` directory in VM.
 is running.
 
 8. **Website navigation**
-    - The main page is a listing of restaurants. There is a Google+ signin button at the
-    top-right corner of all pages which changes to a logout button with user photo when logged in.
-    Click on any restaurant row to view the saved items from that restaurant on another
+    - The main page is a listing of restaurants. All pages will have a blue button
+    that goes back to the home page restaurant list.
+    - There is a Google+ signin button at the top-right corner of all pages which 
+    changes to a logout button with user photo when logged in. Click this button
+    to log in and log out.
+    - Click on any restaurant row to view the saved items from that restaurant on another
     page and lists them along with price, description and the user's critique of the item.
-    Critique has three choices: A heart means it is a favorite item, thumbs up means it is
+    - Critique has three choices: A heart means it is a favorite item, thumbs up means it is
     good and might get it again, and a thumbs down means NEVER get it again!
-    - Critiques and the ability to add new items and restaurants is reserved for 
+    - Critiques and the ability to add/edit items and restaurants is reserved for 
     logged in members.
 
 8. **Test the application:**
