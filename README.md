@@ -72,7 +72,7 @@ other files.  Other `*.html` files are inserted as the body to the `base.html` f
 ***`website_mockup/`*** - Sample pages from the application saved as static
 pages showing what the site would look like with a server connection.
 
-***`*.rst`*** - *reStructuredText* files used in Sphinx documentation.
+___`*.rst`___ - *reStructuredText* files used in Sphinx documentation.
 
 ***`conf.py`*** - Configuration file for Sphinx documentation program.
 
