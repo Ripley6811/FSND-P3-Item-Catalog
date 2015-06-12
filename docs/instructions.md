@@ -14,9 +14,9 @@ VM prompt. Navigate to the `/vagrant/catalog` directory in VM.
     ...-trusty-32:/vagrant/catalog$ python database_setup.py
     ``` 
     You should see the database setup commands *echo* to the command terminal without
-    error. The default is you add a postgresql database to the VM server. If you want
-    to use local directory database with the sqlite dbapi, then change **`use_postgresql`**
-    to **`False`** inside the *database_setup.py* file before running all files.
+    error. The default is you add a postgresql database to the VM server. (There is 
+    a sqlite3 dbapi option by changing the value of **`use_postgresql`** but it is 
+    not thoroughly tested.)
 
 4. **Add filler data:**
     - Preset data can be added to the database by following the setup with running
@@ -26,14 +26,12 @@ VM prompt. Navigate to the `/vagrant/catalog` directory in VM.
     ``` 
     
 3. **Run the server file:** 
-    - Run `app.py` from virtual machine prompt:
+    - Run `catalog_app.py` from in the `vagrant` directory VM prompt:
 
     ```ssh
-    ...-trusty-32:/vagrant/tournament$ python app.py
-    Connected to PostgreSQL: resttest
+    ...-trusty-32:/vagrant$ python catalog_app.py
      * Running on http://0.0.0.0:8000/
      * Restarting with reloader
-    Connected to PostgreSQL: resttest
     ```
 
 6. **Navigate to `http://localhost:8000`:**
@@ -55,6 +53,8 @@ is running.
     - Critiques and the ability to add/edit items and restaurants is reserved for 
     logged in members. Look for blue buttons with a pencil image in the item row 
     when logged in.
+    - See "Urban Burger" restaurant to see how user critiques are aggregated and 
+    ordered (user critiques created in `fake_data.py`).
 
 8. **Test the application:**
     - Install the **`Flask-Testing`** package with pip in the virtual environment
@@ -64,4 +64,4 @@ is running.
     ```
     sudo pip install Flask-Testing
     ```
-    Run the test suite file called `app_test.py`.
+    Run the test suite file called `catalog_app_test.py` in the `vagrant` directory.
