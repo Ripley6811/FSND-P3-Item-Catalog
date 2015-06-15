@@ -84,11 +84,11 @@ def api_users():
 
 @app.route('/api/menu', methods=['GET'])
 @app.route('/api/menu/restaurant=<string:name>', methods=['GET'])
-@app.route('/api/menu/restaurant_id=<int:rid>', methods=['GET'])
-def api_menu(name=None, rid=None):
+@app.route('/api/menu/restaurant_id=<int:r_id>', methods=['GET'])
+def api_menu(name=None, r_id=None):
     """Returns the menu for a restaurant in JSON format.
 
-    Requires either the name or an database ID number for a restaurant.
+    Requires either the name or database ID number for a restaurant.
     You can get a list of restaurant names and ID numbers by using
     "/api/restaurants".
 
@@ -97,29 +97,24 @@ def api_menu(name=None, rid=None):
     :returns: JSON with a 'menu' key and a list of menu items.
     """
     if 'restaurant_id' in request.args:
-        rid = request.args.get('restaurant_id')
+        r_id = request.args.get('restaurant_id')
     if 'restaurant' in request.args:
         name = request.args.get('restaurant')
     if name:
+        # Retrieve restaurant ID in database with the given name.
         try:
-            restaurant = app.q_Restaurant().filter_by(name=name).one()
-            recs = app.q_MenuItem().filter_by(restaurant_id=restaurant.id)
-            recs_json = [each.sdict for each in recs]
-            return jsonify(status='ok', menu=recs_json)
+            record = app.q_Restaurant().filter_by(name=name).one()
         except NoResultFound:
-            return jsonify(status='error', error='Restaurant not found.')
+            return jsonify(error='Restaurant not found.'), 400
         except MultipleResultsFound:
-            return jsonify(status='error',
-                           error='Multiple restaurants found. Use ID instead.')
-    elif rid is not None:
-        recs = app.q_MenuItem().filter_by(restaurant_id=rid)
-        recs_json = [each.sdict for each in recs]
-        if len(recs_json) > 0:
-            return jsonify(status='ok', menu=recs_json)
+            resp = jsonify(error='Multiple restaurants found. Use ID instead.')
+            return resp, 400
         else:
-            return jsonify(status='error', error='Menu items not found.')
-    return jsonify(status='error',
-                   error='ID or name parameter not found in database')
+            r_id = record.id
+    recs = app.q_MenuItem().filter_by(restaurant_id=r_id)
+    # Convert database objects to serializable dict objects.
+    recs_json = [each.sdict for each in recs]
+    return jsonify(status='ok', menu=recs_json)
 
 
 @app.route('/api/favorites', methods=['GET'])
@@ -141,15 +136,13 @@ def get_favorites(user_id=None, limit=3):
         try:
             user_id = login_session['user_id']
         except KeyError as e:
-            resp = jsonify(status='error', error='User not logged in.')
-            resp.status_code = 400
-            return resp
+            return jsonify(status='error', error='User ID not found.'), 400
     recs = app.q_Rating().filter_by(user_id=user_id, rating=1)
     count = recs.count()
     # Make a list of the serializable version of each rec.
     recs_json = [each.item.sdict for each in recs]
     # Return a random sampling of the recs up to the limit.
-    return jsonify(items=sample(recs_json, min(limit, count)))
+    return jsonify(items=sample(recs_json, min(limit, count))), 501
 
 
 @app.route('/save/rating', methods=['POST'])
@@ -166,9 +159,7 @@ def save_rating():
         item_id = params['item_id']
         new_rating = params['rating']
     except KeyError:
-        resp = jsonify(error='Missing data in request.')
-        resp.status_code = 400
-        return resp
+        return jsonify(error='Missing data in request.'), 400
     try:
         # Find existing rating record. Throws NoResultFound if none.
         rec = app.q_Rating().filter_by(user_id=user_id,
@@ -194,31 +185,24 @@ def save_item():
     :Returns:
         Response object with id of new menu item record as JSON.
     """
+    user_id = login_session['user_id']
     obj = request.get_json()
     rating = int(obj.pop('rating', 0))
     try:
-        new_rec = MenuItem(created_by=login_session['user_id'],
+        new_rec = MenuItem(created_by=user_id,
                            **obj.pop('item'))
         app.db_session.add(new_rec)
-        app.db_session.commit()
+        app.db_session.flush()
         if rating:
             new_rating = MenuItemRating(rating=rating,
                                         item_id=new_rec.id,
-                                        user_id=login_session['user_id'])
+                                        user_id=user_id)
             app.db_session.add(new_rating)
             app.db_session.commit()
         return jsonify(status='ok', id=new_rec.id)
     except IntegrityError as e:
         app.db_session.rollback()
-        resp = jsonify(status='error', error=e.orig.pgerror)
-        resp.status_code = 500
-        return resp
-    except KeyError:
-        app.db_session.rollback()
-        resp = jsonify(status='error',
-                       error='Must be logged in to make database changes.')
-        resp.status_code = 401
-        return resp
+        return jsonify(status='error', error=e.orig.pgerror), 500
 
 
 @app.route('/update/item', methods=['POST'])
@@ -228,25 +212,28 @@ def update_item():
 
     :Returns: JSON with status of 'ok' or 'error' and message.
     """
+    user_id = login_session['user_id']
     obj = request.get_json()
     item = obj.pop('item')
+    item_id = item['id']
     rating = int(obj.pop('rating', 0))
     if item.get('id', None):
-        app.q_MenuItem().filter_by(id=item['id']).update(item)
-        app.db_session.commit()
+        app.q_MenuItem().filter_by(id=item_id).update(item)
+        app.db_session.flush()
     if rating:
         try:
-            query = app.q_Rating().filter_by(item_id=item['id'],
-                                         user_id=login_session['user_id'])
+            query = app.q_Rating().filter_by(item_id=item_id,
+                                             user_id=user_id)
             rating_rec = query.one()
             rating_rec.rating = rating
-            app.db_session.commit()
+            app.db_session.flush()
         except NoResultFound:
             new_rating = MenuItemRating(rating=rating,
-                                        item_id=item['id'],
-                                        user_id=login_session['user_id'])
+                                        item_id=item_id,
+                                        user_id=user_id)
             app.db_session.add(new_rating)
-            app.db_session.commit()
+            app.db_session.flush()
+    app.db_session.commit()
     return jsonify(status='ok')
 
 
@@ -271,9 +258,7 @@ def save_restaurant():
         return jsonify(status='ok', id=new_rec.id)
     except IntegrityError:
         app.db_session.rollback()
-        res = jsonify(error='Menu item save failed')  # Internal server error
-        res.status_code = 500
-        return res
+        return jsonify(error='Menu item save failed'), 500
 
 
 @app.route('/update/restaurant', methods=['POST'])
@@ -300,7 +285,7 @@ def delete_item():
         Response object with status of 'ok'.
     """
     if 'id' not in request.get_json():
-        return alert(400)
+        return abort(400)
     try:
         record = app.q_MenuItem().get(request.get_json()['id'])
         app.db_session.delete(record)
@@ -308,7 +293,7 @@ def delete_item():
         return jsonify(status='ok')
     except IntegrityError:
         app.db_session.rollback()
-        return alert(500)  # Internal server error
+        return abort(500)  # Internal server error
 
 
 @app.route('/delete/restaurant', methods=['POST'])
@@ -320,7 +305,7 @@ def delete_restaurant():
         Response object with status of 'ok'.
     """
     if 'id' not in request.get_json():
-        return alert(400)
+        return abort(400)
     try:
         record = app.q_Restaurant().get(request.get_json()['id'])
         app.db_session.delete(record)
@@ -328,7 +313,7 @@ def delete_restaurant():
         return jsonify(status='ok', url=url_for('restaurants'))
     except IntegrityError:
         app.db_session.rollback()
-        return alert(500)  # Internal server error
+        return abort(500)  # Internal server error
 
 
 @app.route('/api/environment', methods=['GET'])

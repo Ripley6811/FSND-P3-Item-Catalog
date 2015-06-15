@@ -16,7 +16,7 @@
     <table class="table table-hover table-condensed h3">
         <tbody data-bind="foreach: items">
             <tr data-bind="click: $parent.see_menu">
-                <td data-bind="text: $index() + 1 + ':'"></td>
+                <td data-bind="text: $index() + 1 + ' )'"></td>
                 <td>
                     <span data-bind="text: name"></span>
                     - <span data-bind="text: '$' + price"></span>
@@ -31,7 +31,7 @@
 
 <script>
 var view_model = view_model || {};
-    
+
 view_model.see_menu = function(item) {
     window.location = '/menu/' + item.restaurant_id;
 };
@@ -40,7 +40,7 @@ view_model.see_menu = function(item) {
  * Send an AJAX request for list of restaurants and add to display.
  */
 view_model.get_favorites = function() {
-    post('/api/favorites', {}, function(response) {
+    aget('/api/favorites', {}, function(response) {
         view_model.items.removeAll();
         for (var i=0; i<response.items.length; i++) {
             view_model.items.push(response.items[i]);

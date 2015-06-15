@@ -5,7 +5,8 @@
 <div class="container" style="margin-top:50px">
     <div>
         <h1 style="height: 39px" data-bind="text: current_restaurant.name"></h1>
-        <h3>Enter a new restaurant below.</h3>
+        <h3 data-bind="visible: current_restaurant.id == undefined">Enter a new restaurant below.</h3>
+        <h3 data-bind="visible: current_restaurant.id != undefined">Edit restaurant below.</h3>
         <div data-bind="with: current_restaurant">
             <div class="form-group">
                 <label>Name</label>

@@ -82,7 +82,7 @@ view_model.set_rating = function(rating) {
             item_id: this.id,
             rating: rating
         };
-        post('/save/rating', params, function(response) {
+        post("{{ url_for('save_rating') }}", params, function(response) {
             if (response.status != 'ok') {
                 line_item.rating(old_rating);
                 // Return the rating counter to previous setting.
@@ -109,7 +109,8 @@ view_model.edit = function(menu_item) {
  * Send an AJAX request for item data and add to food_list array for display.
  */
 view_model.get_items = function() {
-    post('/get/items', {id: view_model.restaurant.id}, function(response) {
+    var params = {id: view_model.restaurant.id};
+    post("{{ url_for('get_items') }}", params, function(response) {
         view_model.food_list.removeAll();
         for (var i=0; i<response.items.length; i++) {
             var item = response.items[i];
