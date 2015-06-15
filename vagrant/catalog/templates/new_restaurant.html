@@ -53,7 +53,6 @@ if (!isNaN(restaurant_id)) {
 view_model.submit = function() {
     // Convert current_restaurant KO model to serializable object.
     var params = {
-        _csrf: view_model._csrf,
         restaurant: ko.toJS(view_model.current_restaurant)
     };
     var callback = function(response) {
@@ -80,7 +79,6 @@ view_model.del = function() {
     if (c && !isNaN(restaurant_id)) {
         // Convert current_item KO model to serializable object.
         var params = {
-            _csrf: view_model._csrf,
             id: view_model.current_restaurant.id,
         };
         var callback = function(response) {

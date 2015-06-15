@@ -40,14 +40,14 @@
                 </tr>
             </tbody>
         </table>
-        
+
     </div>
 </div>
 
 <script>
 var view_model = view_model || {};
 view_model.restaurant = {{ restaurant|tojson }};
-    
+
 /**
  * Send a AJAX request to delete the current restaurant.
  */
@@ -55,8 +55,7 @@ view_model.delete_restaurant = function() {
     var c = confirm("Are you sure you want to delete this restaurant"
                     + " and all menu items?");
     if (c) {
-        var params = {id: view_model.restaurant.id,
-                     _csrf: view_model._csrf};
+        var params = {id: view_model.restaurant.id};
         post('/delete/restaurant', params, function(response) {
             // Go to list of restaurants.
             if (response.status == 'ok') {
@@ -65,7 +64,7 @@ view_model.delete_restaurant = function() {
         });
     }
 };
-    
+
 /**
  * Save a rating change to the database.
  * @param {Number} rating The new menu item rating.
@@ -73,20 +72,22 @@ view_model.delete_restaurant = function() {
 view_model.set_rating = function(rating) {
     // Store old rating temporarilly
     var old_rating = this.rating();
+    var line_item = this;
     if (old_rating != rating) {
         this.rating(rating);
-        // Adjust the rating counters.
-        this.tally[rating](this.tally[rating]() + 1);
-        this.tally[old_rating](this.tally[old_rating]() - 1);
+        // Adjust the rating counters (immediately for responsiveness).
+        line_item.tally[rating](line_item.tally[rating]() + 1);
+        line_item.tally[old_rating](line_item.tally[old_rating]() - 1);
         var params = {
-            _csrf: view_model._csrf,
-            item_id: this.id, 
+            item_id: this.id,
             rating: rating
         };
         post('/save/rating', params, function(response) {
             if (response.status != 'ok') {
-                window.location = 
-                "{{url_for('restaurant_view', restaurant_id=restaurant.id)}}";
+                line_item.rating(old_rating);
+                // Return the rating counter to previous setting.
+                line_item.tally[rating](line_item.tally[rating]() - 1);
+                line_item.tally[old_rating](line_item.tally[old_rating]() + 1);
             }
         });
     }
@@ -103,7 +104,7 @@ view_model.edit = function(menu_item) {
         "&rating=" + menu_item.rating()
     ].join('');
 };
-    
+
 /**
  * Send an AJAX request for item data and add to food_list array for display.
  */
@@ -117,8 +118,6 @@ view_model.get_items = function() {
                           ko.observable(item.favorite_count),
                           ko.observable(item.good_count),
                           ko.observable(item.bad_count)]
-            console.log(ko.toJS(item.tally));
-            console.log(item.rating());
             view_model.food_list.push(item);
         }
     });

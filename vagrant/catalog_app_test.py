@@ -157,8 +157,8 @@ if __name__ == '__main__':
     unittest.main()
     
 """ Testing API Reference:
-Most assert methods are inherited from `unittest`. Additional methods unique
-to `flask_testing` are provided with and without underscores.
+Most assert methods are inherited from `unittest`. Additional methods
+unique to `flask_testing` are provided with and without underscores.
 
 Results from dir(TestCase)
 --------------------------

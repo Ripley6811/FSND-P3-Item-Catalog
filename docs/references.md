@@ -9,6 +9,8 @@
 - [How to serialize SQLAlchemy row data](http://stackoverflow.com/questions/5022066/how-to-serialize-sqlalchemy-result-to-json)
 - [SQL multi-column composite uniqueness](http://stackoverflow.com/a/10061143/1172891)
 - [How to get Sphinx documentation to load resources properly on Github pages](http://stackoverflow.com/a/24088631/1172891)
+- [How to expire a cookie](http://stackoverflow.com/questions/14386304/flask-how-to-remove-cookies)
+
 
 ***SQLAlchemy.org***
 

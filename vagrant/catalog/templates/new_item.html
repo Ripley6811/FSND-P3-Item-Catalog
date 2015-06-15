@@ -74,14 +74,13 @@ if (!isNaN(item_id)) {
 view_model.submit = function() {
     // Convert current_item KO model to serializable object.
     var params = {
-        _csrf: view_model._csrf,
         item: ko.toJS(view_model.current_item),
         rating: view_model.item_rating(),
     };
     var callback = function(response) {
         // Go to restaurant menu view if successful.
         if (response.status == 'ok') {
-            window.location = 
+            window.location =
                 "{{ url_for('restaurant_view', restaurant_id=restaurant.id) }}";
         } else {
             console.log(response);
@@ -103,13 +102,12 @@ view_model.del = function() {
     if (c && !isNaN(item_id)) {
         // Convert current_item KO model to serializable object.
         var params = {
-            _csrf: view_model._csrf,
             id: view_model.current_item.id,
         };
         var callback = function(response) {
             // Go to restaurant menu view if successful.
             if (response.status == 'ok') {
-                window.location = 
+                window.location =
                     "{{ url_for('restaurant_view', restaurant_id=restaurant.id) }}";
             } else {
                 console.log(response);

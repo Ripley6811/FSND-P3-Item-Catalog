@@ -32,7 +32,7 @@ var aget = function (url, params, callback) {
     url += '?';
     params = ko.toJSON(params);
     for (key in params) {
-        url += key + '=' + params[key]; 
+        url += key + '=' + params[key];
     }
     xmlhttp.open('GET', url, true);
     xmlhttp.send();
