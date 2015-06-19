@@ -7,8 +7,8 @@
             <h1>Restaurant List</h1>
         </div>
         <div class="col-md-7 h1" data-bind="visible: user.username">
-            <a role="button" class="btn btn-primary" href="/new/restaurant">Add New Restaurant</a>
-            <a role="button" class="btn btn-danger" href="/random_favorites">Random Favorite!</a>
+            <a role="button" class="btn btn-primary" href="{{ url_for('new_restaurant') }}">Add New Restaurant</a>
+            <a role="button" class="btn btn-danger" href="{{ url_for('random_favorites') }}">Random Favorite!</a>
         </div>
     </div>
 
@@ -29,10 +29,10 @@
 
 <script>
 var view_model = view_model || {};
-    
+
 view_model.see_menu = function(restaurant) {
     if (event.target.nodeName != 'BUTTON' && event.target.nodeName != 'SPAN') {
-        window.location = '/menu/' + restaurant.id;
+        window.location = "{{ url_for('restaurant_view') }}" + restaurant.id;
     }
 };
 
@@ -40,7 +40,7 @@ view_model.see_menu = function(restaurant) {
  * Send an AJAX request for list of restaurants and add to display.
  */
 view_model.get_restaurants = function() {
-    aget('/api/restaurants', {}, function(response) {
+    aget("{{ url_for('api_restaurants') }}", {}, function(response) {
         view_model.restaurants.removeAll();
         for (var i=0; i<response.restaurants.length; i++) {
             view_model.restaurants.push(response.restaurants[i]);
@@ -49,12 +49,12 @@ view_model.get_restaurants = function() {
 }
 view_model.restaurants = ko.observableArray();
 view_model.get_restaurants();
-    
+
 /**
  * Go to restaurant edit page.
  */
 view_model.edit = function(restaurant) {
-    window.location = "{{ url_for('new_restaurant') }}?id="+restaurant.id;
+    window.location = "{{ url_for('new_restaurant') }}?id=" + restaurant.id;
 };
 </script>
 {% endblock %}

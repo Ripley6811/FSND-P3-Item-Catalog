@@ -3,56 +3,64 @@ from flask_testing import TestCase, LiveServerTestCase
 import json
 import requests
 
-from catalog import app, db
+from catalog import app, db_setup as db
 """
 Access the active session with `app.db_session`
-Access the database table classes through `db`: 
+Access the database table classes through `db`:
    `db.MenuItem`, `db.Restaurant`, etc.
 """
 
 class MyTestCase(TestCase):
-    
+
     def create_app(self):
         app.secret_key = 'secret_key'
         # Disable some built in error catching with the 'TESTING' flag.
         app.config['TESTING'] = True
         return app
-    
+
     def setUp(self):
         db.create_all(test=True)
         app.start_session(test=True)
-        
+
     def tearDown(self):
         app.db_session.close()
         db.drop_all(test=True)
 
 
-class TestPageLoadingAndRedirect(MyTestCase):
-    
+class TestNoLoginPageLoadingAndRedirect(MyTestCase):
+
     def test_main_page_load(self):
         response = self.client.get("/")
         self.assert200(response)
 
-    def test_no_login_add_restaurant(self):
+    def test_menu_load(self):
+        response = self.client.get("/menu/1")
+        self.assertRedirects(response, '/')
+
+    def test_favorites_load(self):
+        response = self.client.get("/random_favorites")
+        self.assertRedirects(response, '/')
+
+    def test_add_restaurant(self):
         response = self.client.get('/new/restaurant')
         self.assertRedirects(response, '/')
 
-    def test_no_login_add_menu_item(self):
+    def test_add_menu_item(self):
         response = self.client.get('/new/item/1')
         self.assertRedirects(response, '/')
 
-        
+
 class TestJSONResponse(MyTestCase):
-    
+
     def test_some_json(self):
         response = self.client.get("/api/environment")
         self.assertIsInstance(response.json, dict)
         self.assertIn('installed_packages', response.json)
-        
+
 
 class TestNoLoginResponses(MyTestCase):
     """Test methods that do not require login."""
-    
+
     r_data = dict(
         name= 'Area Critters',
         phone= '555-12345',
@@ -67,17 +75,17 @@ class TestNoLoginResponses(MyTestCase):
 
     def test_add_restaurant_without_login(self):
         # Insert record must return status 401 if not logged in.
-        response = self.client.post('/save/restaurant', 
-                                    data=json.dumps(self.r_data), 
+        response = self.client.post('/restaurants',
+                                    data=json.dumps(self.r_data),
                                     content_type='application/json')
         self.assert401(response, 'Save restaurant data post error')
-    
+
     def test_add_menu_item_without_login(self):
-        response = self.client.post('/save/item', 
-                                    data=json.dumps(self.mi_baddata), 
+        response = self.client.post('/items',
+                                    data=json.dumps(self.mi_baddata),
                                     content_type='application/json')
         self.assert401(response, 'Did not return 401')
-        
+
 #class TestWithLoginResponses(MyTestCase):
 #    """Test methods that require a logged in user."""
 #
@@ -92,20 +100,20 @@ class TestNoLoginResponses(MyTestCase):
 #        price = '15.99',
 #        course = 'Entree',
 #    )
-#        
+#
 #    def test_add_bad_restaurant(self):
 #        # Insert record must return status 500 if failure.
 #        r_baddata = self.r_data.copy()
 #        r_baddata.pop('name')
-#        response = self.client.post('/save/restaurant', 
-#                                    data=json.dumps(r_baddata), 
+#        response = self.client.post('/save/restaurant',
+#                                    data=json.dumps(r_baddata),
 #                                    content_type='application/json')
 #        self.assert500(response, 'Save restaurant data post did not fail')
-#    
+#
 #    def test_add_menu_item_with_restaurant(self):
 #        # Add restaurant
-#        response = self.client.post('/save/restaurant', 
-#                                    data=json.dumps(self.r_data), 
+#        response = self.client.post('/save/restaurant',
+#                                    data=json.dumps(self.r_data),
 #                                    content_type='application/json')
 #        self.assert200(response, 'Save restaurant data post error')
 #        # Create good menu entry with `id` from previous response.
@@ -113,8 +121,8 @@ class TestNoLoginResponses(MyTestCase):
 #        restaurant_id = response.json['id']
 #        mi_data['restaurant_id'] = restaurant_id
 #        # Insert new menu item record.
-#        response = self.client.post('/save/item', 
-#                                    data=json.dumps(self.mi_baddata), 
+#        response = self.client.post('/save/item',
+#                                    data=json.dumps(self.mi_baddata),
 #                                    content_type='application/json')
 #        self.assert200(response, 'Did not return successful status code')
 #        # Retrieve list of menu items for restaurant.
@@ -129,33 +137,33 @@ class TestNoLoginResponses(MyTestCase):
 #        self.assertIsInstance(r0.pop('restaurant_name'), unicode)
 #        # Compare other data with original data.
 #        self.assertDictContainsSubset(mi_data, r0)
-        
-        
+
+
 class MyLiveTest(LiveServerTestCase):
-    
+
     def create_app(self):
         app.secret_key = 'secret_key'
         app.config['TESTING'] = True
         app.config['LIVESERVER_PORT'] = 8888 # Default is 5000
         return app
-    
+
     def setUp(self):
         db.create_all(test=True)
         app.start_session(test=True)
-        
+
     def tearDown(self):
         app.db_session.close()
         db.drop_all(test=True)
-    
-    
+
+
     def test_server_is_up_and_running(self):
         response = requests.get(self.get_server_url())
         self.assertEqual(response.status_code, 200)
-        
-        
+
+
 if __name__ == '__main__':
     unittest.main()
-    
+
 """ Testing API Reference:
 Most assert methods are inherited from `unittest`. Additional methods
 unique to `flask_testing` are provided with and without underscores.

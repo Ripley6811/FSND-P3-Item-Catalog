@@ -44,11 +44,14 @@
 var view_model = view_model || {};
 view_model.user = {
     username: ko.observable('{{ username }}'),
-    picture: ko.observable('{{ picture }}'),
+    picture: ko.observable('{{ picture }}')
 }
 
-view_model.logout = function() {
-    post('/gdisconnect', {}, function(response) {
+/**
+ * Reload current view after logout.
+ */
+view_model.logout = function () {
+    post("{{ url_for('gdisconnect') }}", {}, function(response) {
         if (response.status == 'ok') window.location.reload();
     });
 };

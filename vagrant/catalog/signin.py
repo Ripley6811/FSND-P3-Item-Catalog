@@ -20,9 +20,7 @@ def gconnect():
         # Exchange code for credentials object with token
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
-        res = jsonify(message='Failed to upgrade authorization code')
-        res.status_code = 401
-        return res
+        return jsonify(message='Failed to upgrade authorization code'), 401
 
     # Check that access token is valid
     access_token = credentials.access_token
@@ -31,24 +29,18 @@ def gconnect():
     result = requests.get(url).json()
     # Abort if error.
     if result.get('error') is not None:
-        res = jsonify(message=result.get('error'))
-        res.status_code = 500
-        return res
+        return jsonify(message=result.get('error')), 500
 
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
-        res = jsonify(message="Token's user ID doesn't match given user ID.")
-        res.status_code = 401
-        return res
+        return jsonify(message="Token's user ID doesn't match login."), 401
 
     # Verify that the access token is valid for this app.
     app_token = ''.join(['494203108202-8qijkubc2hiio08dptgb5cc21su8qf84',
                          '.apps.googleusercontent.com'])
     if result['issued_to'] != app_token:
-        res = jsonify(message="Token's client ID does not match app's.")
-        res.status_code = 401
-        return res
+        return jsonify(message="Token's client ID does not match app's."), 401
 
     stored_credentials = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
@@ -100,9 +92,7 @@ def gdisconnect():
     access_token = login_session.get('access_token', None)
     if access_token is None:
         login_session.clear()
-        response = jsonify(message='Current user not connected.')
-        response.status_code = 401
-        return response
+        return jsonify(error='Current user not connected.'), 401
 
     url = ('https://accounts.google.com/o/oauth2/revoke?token={}'
            .format(access_token))
@@ -116,10 +106,7 @@ def gdisconnect():
         return resp
     else:
         # For whatever reason, the given token was invalid.
-        resp = jsonify(status='error',
-                       message='Failed to revoke token for given user.')
-        resp.status_code = 400
-        return resp
+        return jsonify(error='Failed to revoke token for given user.'), 400
 
 
 ##############################################################################
@@ -131,8 +118,7 @@ def _csrf():
     Creates a new *csrf* code and saves it in the *login_session*, then
     returns the code.
 
-    :Returns:
-        A csrf code as a 32-character string.
+    :Returns: A csrf code as a 32-character string.
     """
     login_session['_csrf'] = uuid.uuid4().hex.upper()
     return login_session['_csrf']

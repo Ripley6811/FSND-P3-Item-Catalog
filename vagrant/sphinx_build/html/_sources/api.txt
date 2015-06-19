@@ -11,9 +11,9 @@ Get list of restaurants
     :Authentication: Not required.
     :response: JSON
     :example:
-        
+
         .. sourcecode:: json
-        
+
             {
               "restaurants": [
                 {
@@ -23,10 +23,9 @@ Get list of restaurants
                   "note": "",
                   "phone": "555-1234"
                 },
-              ],
-              "status": "ok"
+              ]
             }
-    
+
 Get restaurant menu
 -------------------
 .. http:get:: /api/menu
@@ -38,9 +37,9 @@ Get restaurant menu
     :arg optional restaurant: Name of a restaurant in the database.
     :response: JSON
     :example:
-        
+
         .. sourcecode:: json
-        
+
             {
               "menu": [
                 {
@@ -56,10 +55,9 @@ Get restaurant menu
                   "restaurant_id": 3,
                   "restaurant_name": "Panda Garden"
                 },
-              ],
-              "status": "ok"
+              ]
             }
-    
+
 Get list of users
 -------------------
 .. http:get:: /api/users
@@ -69,11 +67,10 @@ Get list of users
     :Authentication: Not required.
     :response: JSON
     :example:
-        
+
         .. sourcecode:: json
-        
+
             {
-              "status": "ok",
               "users": [
                 {
                   "email": "b.white@gmail.com",
@@ -95,24 +92,24 @@ Get list of users
                 }
               ]
             }
-        
+
 Get list of favorites
 ---------------------
 .. http:get:: /api/favorites
 
-    Gets a random list of a user's favorited items.    
+    Gets a random list of a user's favorited items.
     Pass a *user_id* as a parameter or default to the currently logged in user.
     Returns an error if neither is found. The default *limit* is three.
-    
+
 
     :Authentication: Optional.
     :arg optional user_id: ID of user.
     :arg optional limit: Max number of items to return.
     :Response:  JSON
     :example:
-        
+
         .. sourcecode:: json
-        
+
             {
               "items": [
                 {
@@ -156,32 +153,4 @@ Get list of favorites
                 }
               ]
             }
-        
-        
-Get list of VM packages
-------------------------------------
-.. http:get:: /api/environment
 
-    Gets a listing of installed packages and version numbers from server.
-    
-    :Authentication: Not required.
-    :Response:  JSON
-    :example:
-        
-        .. sourcecode:: json
-        
-            {
-              "installed_packages": [
-                "alabaster == 0.7.4",
-                "apt-xapian-index == 0.45",
-                "argparse == 1.2.1",
-                "babel == 1.3",
-                "bleach == 1.4.1",
-                "blinker == 1.3",
-                "chardet == 2.0.1",
-                "cheetah == 2.4.4",
-                "cloud-init == 0.7.5",
-                "..."
-              ]
-            }
-                

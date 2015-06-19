@@ -45,6 +45,8 @@ Author: Jay W Johnson
 ## File List
 ***`catalog_app.py`*** - Main program that runs the server side operations.
 
+***`catalog_app_test.py`*** - Test suite for **catalog_app**.
+
 ***`catalog/__init__.py`*** - Package init file.
 
 ***`catalog/api.py`*** - Flask routing methods that return JSON data.
@@ -59,8 +61,6 @@ and builds a new database with empty tables. Contains the database table informa
 and a method for getting a connection (`get_database_session()`).
 
 ***`catalog/fake_data.py`*** - Run this file to fill the database with fictional sample data.
-
-***`catalog_app_test.py`*** - Test suite for **catalog_app**.
 
 ***`static/js/ajax.js`*** - Contains a javascript method that simplifies a POST request.
 
@@ -84,8 +84,9 @@ ___`*.rst`___ - *reStructuredText* files used in Sphinx documentation.
 with the Google+ API.
 
 
+
 ## Instructions
-1. **Virtual Machine setup:** 
+1. **Virtual Machine setup:**
     - Follow the instructions [here (on Udacity.com)](https://www.udacity.com/wiki/ud088/vagrant)
 to set up the Vagrant virtual machine used in this project.
 
@@ -94,15 +95,15 @@ to set up the Vagrant virtual machine used in this project.
 From there, run `vagrant up` then `vagrant ssh` and that will bring you to the
 VM prompt. Navigate to the `/vagrant/catalog` directory in VM.
 
-3. **Database setup:** 
-    - The `database_setup.py` file contains all the code to set up the **resttest** 
+3. **Database setup:**
+    - The `database_setup.py` file contains all the code to set up the **resttest**
     database, tables and views. Run this file within the VM:
     ```ssh
     ...-trusty-32:/vagrant/catalog$ python database_setup.py
-    ``` 
+    ```
     You should see the database setup commands *echo* to the command terminal without
-    error. The default is you add a postgresql database to the VM server. (There is 
-    a sqlite3 dbapi option by changing the value of **`use_postgresql`** but it is 
+    error. The default is you add a postgresql database to the VM server. (There is
+    a sqlite3 dbapi option by changing the value of **`use_postgresql`** but it is
     not thoroughly tested.)
 
 4. **Add filler data:**
@@ -110,9 +111,9 @@ VM prompt. Navigate to the `/vagrant/catalog` directory in VM.
     the `fake_data.py` file within the VM:
     ```ssh
     ...-trusty-32:/vagrant/catalog$ python fake_data.py
-    ``` 
-    
-3. **Run the server file:** 
+    ```
+
+3. **Run the server file:**
     - Run `catalog_app.py` from in the `vagrant` directory VM prompt:
 
     ```ssh
@@ -122,7 +123,7 @@ VM prompt. Navigate to the `/vagrant/catalog` directory in VM.
     ```
 
 6. **Navigate to `http://localhost:8000`:**
-    - The home page of website is at `http://localhost:8000` while the server (`app.py`) 
+    - The home page of website is at `http://localhost:8000` while the server (`catalog_app.py`) 
 is running.
 
 8. **Website navigation**
@@ -130,17 +131,17 @@ is running.
     that goes back to the home page restaurant list. Blue editing buttons, shown with
     a pencil image (Glyphicon) appear for each restaurant and each item only if
     a user is logged in.
-    - There is a Google+ signin button at the top-right corner of all pages which 
+    - There is a Google+ signin button at the top-right corner of all pages which
     changes to a logout button with user photo when logged in. Click this button
     to log in and log out.
     - Click on any restaurant row to view the saved items from that restaurant on another
     page. Displays a list including with price, description and the user's critique of the item.
     - Critique has three choices: A heart means it is a favorite item, thumbs up means it is
     good and might get it again, and a thumbs down means NEVER get it again!
-    - Critiques and the ability to add/edit items and restaurants is reserved for 
-    logged in members. Look for blue buttons with a pencil image in the item row 
+    - Critiques and the ability to add/edit items and restaurants is reserved for
+    logged in members. Look for blue buttons with a pencil image in the item row
     when logged in.
-    - See "Urban Burger" restaurant to see how user critiques are aggregated and 
+    - See "Urban Burger" restaurant to see how user critiques are aggregated and
     ordered (user critiques created in `fake_data.py`).
 
 8. **Test the application:**
@@ -152,6 +153,7 @@ is running.
     sudo pip install Flask-Testing
     ```
     Run the test suite file called `catalog_app_test.py` in the `vagrant` directory.
+
 
 
 ## References
@@ -166,6 +168,9 @@ is running.
 - [How to serialize SQLAlchemy row data](http://stackoverflow.com/questions/5022066/how-to-serialize-sqlalchemy-result-to-json)
 - [SQL multi-column composite uniqueness](http://stackoverflow.com/a/10061143/1172891)
 - [How to get Sphinx documentation to load resources properly on Github pages](http://stackoverflow.com/a/24088631/1172891)
+- [How to expire a cookie](http://stackoverflow.com/questions/14386304/flask-how-to-remove-cookies)
+- [SQLAlchemy filter match any in set](http://stackoverflow.com/questions/15267755/query-for-multiple-values-at-once)
+
 
 ***SQLAlchemy.org***
 

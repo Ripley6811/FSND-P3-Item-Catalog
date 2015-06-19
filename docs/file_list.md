@@ -1,5 +1,7 @@
 ***`catalog_app.py`*** - Main program that runs the server side operations.
 
+***`catalog_app_test.py`*** - Test suite for **catalog_app**.
+
 ***`catalog/__init__.py`*** - Package init file.
 
 ***`catalog/api.py`*** - Flask routing methods that return JSON data.
@@ -14,8 +16,6 @@ and builds a new database with empty tables. Contains the database table informa
 and a method for getting a connection (`get_database_session()`).
 
 ***`catalog/fake_data.py`*** - Run this file to fill the database with fictional sample data.
-
-***`catalog_app_test.py`*** - Test suite for **catalog_app**.
 
 ***`static/js/ajax.js`*** - Contains a javascript method that simplifies a POST request.
 

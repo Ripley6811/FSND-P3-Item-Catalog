@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<a id="back-btn" class="btn btn-lg btn-primary" href="/"><span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-home"></span></a>
+<a id="back-btn" class="btn btn-lg btn-primary" href="{{ url_for('restaurants') }}"><span class="glyphicon glyphicon-menu-left"></span><span class="glyphicon glyphicon-home"></span></a>
 <div class="container" style="margin-top:50px">
     <div>
         <h1 data-bind="text: restaurant.name"></h1>
@@ -56,7 +56,7 @@ view_model.current_item = {
     description: ko.observable('{{ item.description|replace("'", "\\'")|safe }}'),
     price: ko.observable('{{ item.price|replace("'", "\\'")|safe }}'),
     course: ko.observable('{{ item.course|replace("'", "\\'")|safe }}'),
-    restaurant_id: view_model.restaurant.id,
+    restaurant_id: view_model.restaurant.id
 };
 view_model.item_rating = ko.observable(parseInt('{{ rating|replace("'", "\\'")|safe }}'));
 
@@ -75,11 +75,13 @@ view_model.submit = function() {
     // Convert current_item KO model to serializable object.
     var params = {
         item: ko.toJS(view_model.current_item),
-        rating: view_model.item_rating(),
+        rating: view_model.item_rating()
     };
     var callback = function(response) {
         // Go to restaurant menu view if successful.
-        if (response.status == 'ok') {
+        console.log(response);
+        console.log(typeof response.id);
+        if (typeof response.id == 'number') {
             window.location =
                 "{{ url_for('restaurant_view', restaurant_id=restaurant.id) }}";
         } else {
@@ -88,9 +90,9 @@ view_model.submit = function() {
         }
     };
     if (params.item.id) {
-        post('/update/item', params, callback);
+        aput("{{ url_for('update_item') }}", params, callback);
     } else {
-        post('/save/item', params, callback);
+        post("{{ url_for('save_item') }}", params, callback);
     }
 };
 
@@ -102,7 +104,7 @@ view_model.del = function() {
     if (c && !isNaN(item_id)) {
         // Convert current_item KO model to serializable object.
         var params = {
-            id: view_model.current_item.id,
+            id: view_model.current_item.id
         };
         var callback = function(response) {
             // Go to restaurant menu view if successful.
@@ -114,7 +116,7 @@ view_model.del = function() {
                 alert('There was a problem deleting the item from the database.');
             }
         };
-        post('/delete/item', params, callback);
+        adel("{{ url_for('delete_item') }}", params, callback);
     }
 };
 </script>

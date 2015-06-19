@@ -37,6 +37,7 @@ def restaurants():
     return render_template('index.html', **context)
 
 
+@app.route('/menu/')  # For using "url_for" on client browser without id.
 @app.route('/menu/<int:restaurant_id>')
 def restaurant_view(restaurant_id):
     """Returns a public menu page showing a restaurant's menu items.
@@ -44,6 +45,8 @@ def restaurant_view(restaurant_id):
     Editing and rating buttons are invisible/disabled if user is not logged in.
     """
     restaurant = app.q_Restaurant().get(restaurant_id)
+    if restaurant is None:
+        return redirect(url_for('restaurants'))
     context = {
         'title': 'Menu',
         'restaurant': restaurant.sdict,
@@ -73,7 +76,7 @@ def new_item(restaurant_id):
     }
     if item_id is not None:
         context['item'] = app.q_MenuItem().get(item_id).sdict
-    return render_template('new_item.html', **context)
+    return render_template('form_item.html', **context)
 
 
 @app.route('/new/restaurant')
@@ -92,7 +95,7 @@ def new_restaurant():
     }
     if r_id is not None:
         context['restaurant'] = app.q_Restaurant().get(r_id).sdict
-    return render_template('new_restaurant.html', **context)
+    return render_template('form_restaurant.html', **context)
 
 
 @app.route('/random_favorites')

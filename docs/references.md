@@ -10,6 +10,7 @@
 - [SQL multi-column composite uniqueness](http://stackoverflow.com/a/10061143/1172891)
 - [How to get Sphinx documentation to load resources properly on Github pages](http://stackoverflow.com/a/24088631/1172891)
 - [How to expire a cookie](http://stackoverflow.com/questions/14386304/flask-how-to-remove-cookies)
+- [SQLAlchemy filter match any in set](http://stackoverflow.com/questions/15267755/query-for-multiple-values-at-once)
 
 
 ***SQLAlchemy.org***
