@@ -17,7 +17,7 @@ and a method for getting a connection (`get_database_session()`).
 
 ***`catalog/fake_data.py`*** - Run this file to fill the database with fictional sample data.
 
-***`static/js/ajaj.js`*** - Contains a javascript method that simplifies HTTP requests.
+***`static/js/ajaj.js`*** - Contains javascript methods that simplify HTTP requests.
 
 ***`static/js/signin.js`*** - Contains a javascript method for the google signin button.
 

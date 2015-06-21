@@ -64,7 +64,7 @@ and a method for getting a connection (`get_database_session()`).
 
 ***`catalog/fake_data.py`*** - Run this file to fill the database with fictional sample data.
 
-***`static/js/ajaj.js`*** - Contains a javascript method that simplifies HTTP requests.
+***`static/js/ajaj.js`*** - Contains javascript methods that simplify HTTP requests.
 
 ***`static/js/signin.js`*** - Contains a javascript method for the google signin button.
 
@@ -125,7 +125,7 @@ VM prompt. Navigate to the `/vagrant/catalog` directory in VM.
     ```
 
 6. **Navigate to `http://localhost:8000`:**
-    - The home page of website is at `http://localhost:8000` while the server (`catalog_app.py`) 
+    - The home page of website is at `http://localhost:8000` while the server (`catalog_app.py`)
 is running.
 
 8. **Website navigation**
@@ -137,9 +137,9 @@ is running.
     changes to a logout button with user photo when logged in. Click this button
     to log in and log out.
     - Click on any restaurant row to view the saved items from that restaurant on another
-    page. Displays a list including with price, description and the user's critique of the item.
-    - Critique has three choices: A heart means it is a favorite item, thumbs up means it is
-    good and might get it again, and a thumbs down means NEVER get it again!
+    page. The menu page displays a list including price, description and the user's critique of the item.
+    - Critique has three choices: A *heart* means it is a favorite item, *thumb up* means it is
+    good and might get it again, and a *thumb down* means NEVER get it again!
     - Critiques and the ability to add/edit items and restaurants is reserved for
     logged in members. Look for blue buttons with a pencil image in the item row
     when logged in.
