@@ -60,17 +60,41 @@
 <div class="section" id="module-catalog.__init__">
 <span id="init"></span><h2>__init__<a class="headerlink" href="#module-catalog.__init__" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="catalog.__init__.q_MenuItem">
+<code class="descclassname">catalog.__init__.</code><code class="descname">q_MenuItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.__init__.q_MenuItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new query object for database MenuItem class.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.__init__.q_Rating">
+<code class="descclassname">catalog.__init__.</code><code class="descname">q_Rating</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.__init__.q_Rating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new query object for database MenuItemRating class.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.__init__.q_Restaurant">
+<code class="descclassname">catalog.__init__.</code><code class="descname">q_Restaurant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.__init__.q_Restaurant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new query object for database Restaurant class.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.__init__.q_User">
+<code class="descclassname">catalog.__init__.</code><code class="descname">q_User</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.__init__.q_User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new query object for database MenuItemRating class.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="catalog.__init__.start_session">
 <code class="descclassname">catalog.__init__.</code><code class="descname">start_session</code><span class="sig-paren">(</span><em>test=False</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.__init__.start_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a session (SQLAlchemy) with the database.</p>
 <p>Gets a new session with the testing or production database and assigns
-it to the global <cite>session</cite> variable. The session is also added as an 
+it to the global <cite>session</cite> variable. The session is also added as an
 attribute to &#8216;app&#8217;. See <cite>database_setup.py</cite> for dbapi type and db tables.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>test</strong> (<em>boolean</em>) &#8211; Boolean to use test database instead of the production one.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>test</strong> (<em>boolean</em>) &#8211; Boolean to use test DB instead of the production DB.</td>
 </tr>
 </tbody>
 </table>
@@ -80,30 +104,30 @@ attribute to &#8216;app&#8217;. See <cite>database_setup.py</cite> for dbapi typ
 <div class="section" id="module-catalog.views">
 <span id="views-module"></span><h2>Views module<a class="headerlink" href="#module-catalog.views" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="catalog.views.authorize">
-<code class="descclassname">catalog.views.</code><code class="descname">authorize</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.authorize" title="Permalink to this definition">¶</a></dt>
+<dt id="catalog.views.checks_authorization">
+<code class="descclassname">catalog.views.</code><code class="descname">checks_authorization</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.checks_authorization" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for first checking user login state before proceeding
 with page load. Redirects browser to main page if not logged in.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="catalog.views.new_item">
-<code class="descclassname">catalog.views.</code><code class="descname">new_item</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.new_item" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <strong>private</strong> page for entering a new menu item for a restaurant.</p>
-<p>Redirects to restaurant list if user is not logged in.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="catalog.views.new_restaurant">
-<code class="descclassname">catalog.views.</code><code class="descname">new_restaurant</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.new_restaurant" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <strong>private</strong> page for entering a new restaurant.</p>
+<dt id="catalog.views.item_form">
+<code class="descclassname">catalog.views.</code><code class="descname">item_form</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.item_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <strong>private</strong> page for adding or editing a menu item.</p>
 <p>Redirects to restaurant list if user is not logged in.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="catalog.views.random_favorites">
 <code class="descclassname">catalog.views.</code><code class="descname">random_favorites</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.random_favorites" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a <strong>private</strong> page displaying a random selection of user&#8217;s favorites.</p>
+<dd><p>Returns a <strong>private</strong> page displaying a random selection of favorites.</p>
+<p>Redirects to restaurant list if user is not logged in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="catalog.views.restaurant_form">
+<code class="descclassname">catalog.views.</code><code class="descname">restaurant_form</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.views.restaurant_form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a <strong>private</strong> page for adding or editing a restaurant.</p>
 <p>Redirects to restaurant list if user is not logged in.</p>
 </dd></dl>
 
@@ -140,10 +164,10 @@ with page load. Redirects browser to main page if not logged in.</p>
 <span id="api-module"></span><h2>API module<a class="headerlink" href="#module-catalog.api" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="catalog.api.api_menu">
-<code class="descclassname">catalog.api.</code><code class="descname">api_menu</code><span class="sig-paren">(</span><em>name=None</em>, <em>rid=None</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.api_menu" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">catalog.api.</code><code class="descname">api_menu</code><span class="sig-paren">(</span><em>name=None</em>, <em>r_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.api_menu" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the menu for a restaurant in JSON format.</p>
-<p>Requires either the name or an database ID number for a restaurant.
-You can get a list of restaurant names and ID numbers by using 
+<p>Requires either the name or database ID number for a restaurant.
+You can get a list of restaurant names and ID numbers by using
 &#8220;/api/restaurants&#8221;.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -192,8 +216,8 @@ You can get a list of restaurant names and ID numbers by using
 </dd></dl>
 
 <dl class="function">
-<dt id="catalog.api.check_login_and_csrf_status">
-<code class="descclassname">catalog.api.</code><code class="descname">check_login_and_csrf_status</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.check_login_and_csrf_status" title="Permalink to this definition">¶</a></dt>
+<dt id="catalog.api.checks_login_and_csrf_status">
+<code class="descclassname">catalog.api.</code><code class="descname">checks_login_and_csrf_status</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.checks_login_and_csrf_status" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for first checking user login state before proceeding
 with function. Returns 401 unauthorized error if not logged in or csrf
 check fails.</p>
@@ -207,7 +231,7 @@ check fails.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Response object with status of &#8216;ok&#8217;.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON object with status of &#8216;ok&#8217; or HTML error message.</td>
 </tr>
 </tbody>
 </table>
@@ -221,7 +245,7 @@ check fails.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Response object with status of &#8216;ok&#8217;.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON object with status of &#8216;ok&#8217; or HTML error message.</td>
 </tr>
 </tbody>
 </table>
@@ -230,7 +254,7 @@ check fails.</p>
 <dl class="function">
 <dt id="catalog.api.get_favorites">
 <code class="descclassname">catalog.api.</code><code class="descname">get_favorites</code><span class="sig-paren">(</span><em>user_id=None</em>, <em>limit=3</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.get_favorites" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns three random favorited menu items.</p>
+<dd><p>Returns random selection of favorited menu items (default is three).</p>
 <p>Pass a user_id as a parameter or default to the currently logged in user.
 Returns an error if neither exists.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -255,31 +279,8 @@ Returns an error if neither exists.</p>
 <code class="descclassname">catalog.api.</code><code class="descname">get_items</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.get_items" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of all menu items for a restaurant.</p>
 <p>Items are sorted by overall popularity: number of &#8216;favorite&#8217; ratings down
-to number of &#8216;dislike&#8217; ratings.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="catalog.api.q_MenuItem">
-<code class="descclassname">catalog.api.</code><code class="descname">q_MenuItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.q_MenuItem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new query object for database MenuItem class.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="catalog.api.q_Rating">
-<code class="descclassname">catalog.api.</code><code class="descname">q_Rating</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.q_Rating" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new query object for database MenuItemRating class.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="catalog.api.q_Restaurant">
-<code class="descclassname">catalog.api.</code><code class="descname">q_Restaurant</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.q_Restaurant" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new query object for database Restaurant class.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="catalog.api.q_User">
-<code class="descclassname">catalog.api.</code><code class="descname">q_User</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.q_User" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a new query object for database MenuItemRating class.</p>
+to number of &#8216;dislike&#8217; ratings. Each item also includes the user&#8217;s rating
+if a user is logged in.</p>
 </dd></dl>
 
 <dl class="function">
@@ -291,7 +292,7 @@ to number of &#8216;dislike&#8217; ratings.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Response object with id of new menu item record as JSON.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON object with ID of new menu item or error message.</td>
 </tr>
 </tbody>
 </table>
@@ -320,7 +321,7 @@ to number of &#8216;dislike&#8217; ratings.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Response object with id of the new record.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON object with ID of the new record or error message.</td>
 </tr>
 </tbody>
 </table>
@@ -328,7 +329,7 @@ to number of &#8216;dislike&#8217; ratings.</p>
 
 <dl class="function">
 <dt id="catalog.api.show_environment">
-<code class="descclassname">catalog.api.</code><code class="descname">show_environment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.show_environment" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">catalog.api.</code><code class="descname">show_environment</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#catalog.api.show_environment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of installed packages on the server environment.</p>
 </dd></dl>
 
@@ -340,7 +341,7 @@ to number of &#8216;dislike&#8217; ratings.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON with status of &#8216;ok&#8217; or &#8216;error&#8217; and message.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON with item ID or error message.</td>
 </tr>
 </tbody>
 </table>
@@ -354,7 +355,7 @@ to number of &#8216;dislike&#8217; ratings.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON with status of &#8216;ok&#8217; or &#8216;error&#8217; and message.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">JSON with restaurant ID or error message.</td>
 </tr>
 </tbody>
 </table>
@@ -389,7 +390,7 @@ to number of &#8216;dislike&#8217; ratings.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/app.txt"
+      <li><a href="_sources/catalog.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>

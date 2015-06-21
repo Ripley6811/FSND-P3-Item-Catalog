@@ -1,5 +1,7 @@
 ***`catalog_app.py`*** - Main program that runs the server side operations.
 
+***`catalog_app_test.py`*** - Test suite for **catalog_app**.
+
 ***`catalog/__init__.py`*** - Package init file.
 
 ***`catalog/api.py`*** - Flask routing methods that return JSON data.
@@ -15,9 +17,7 @@ and a method for getting a connection (`get_database_session()`).
 
 ***`catalog/fake_data.py`*** - Run this file to fill the database with fictional sample data.
 
-***`catalog_app_test.py`*** - Test suite for **catalog_app**.
-
-***`static/js/ajax.js`*** - Contains a javascript method that simplifies a POST request.
+***`static/js/ajaj.js`*** - Contains javascript methods that simplify HTTP requests.
 
 ***`static/js/signin.js`*** - Contains a javascript method for the google signin button.
 
@@ -27,7 +27,7 @@ other files.  Other `*.html` files are inserted as the body to the `base.html` f
 ***`website_mockup/`*** - Sample pages from the application saved as static
 pages showing what the site would look like with a server connection.
 
-***`*.rst`*** - *reStructuredText* files used in Sphinx documentation.
+___`*.rst`___ - *reStructuredText* files used in Sphinx documentation.
 
 ***`conf.py`*** - Configuration file for Sphinx documentation program.
 

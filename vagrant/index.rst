@@ -31,7 +31,7 @@ Contents
 .. toctree::
    :maxdepth: 2
    
-   app
+   catalog
    database_setup
    api
     

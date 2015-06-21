@@ -17,18 +17,20 @@ for helping people remember what was good or bad at various restaurants. It also
 features a randomized recommendation system using a person's favorite in case they
 need help deciding where to go eat.
 
-It was built using the Flask microframework connected to a PostgreSQL database, 
-the KnockoutJS MVVM for a dynamic front-end, and Google+ third-party login
-system (OAuth2).
+Built with:
 
-Grunt-Readme was used to generate the README from templates. Sphinx for 
-creating the project and API documentation website.
+- **Flask** microframework connected to a **PostgreSQL** database
+- **KnockoutJS** MVVM for a dynamic front-end
+- **OAuth2** Google+ third-party login
+- **Grunt-Readme** to generate the README from templates
+- **Sphinx** for creating the project and API documentation website
 
 Author: Jay W Johnson
 
 [Link to GitHub repository](https://github.com/Ripley6811/FSND-P3-Item-Catalog)
 
-[App and API Documentation](http://ripley6811.github.io/FSND-P3-Item-Catalog/vagrant/sphinx_build/html/index.html)
+[Link to Documentation](http://ripley6811.github.io/FSND-P3-Item-Catalog/vagrant/sphinx_build/html/index.html)
+
 
 
 ## Required Packages
@@ -45,6 +47,8 @@ Author: Jay W Johnson
 ## File List
 ***`catalog_app.py`*** - Main program that runs the server side operations.
 
+***`catalog_app_test.py`*** - Test suite for **catalog_app**.
+
 ***`catalog/__init__.py`*** - Package init file.
 
 ***`catalog/api.py`*** - Flask routing methods that return JSON data.
@@ -60,9 +64,7 @@ and a method for getting a connection (`get_database_session()`).
 
 ***`catalog/fake_data.py`*** - Run this file to fill the database with fictional sample data.
 
-***`catalog_app_test.py`*** - Test suite for **catalog_app**.
-
-***`static/js/ajax.js`*** - Contains a javascript method that simplifies a POST request.
+***`static/js/ajaj.js`*** - Contains javascript methods that simplify HTTP requests.
 
 ***`static/js/signin.js`*** - Contains a javascript method for the google signin button.
 
@@ -72,7 +74,7 @@ other files.  Other `*.html` files are inserted as the body to the `base.html` f
 ***`website_mockup/`*** - Sample pages from the application saved as static
 pages showing what the site would look like with a server connection.
 
-***`*.rst`*** - *reStructuredText* files used in Sphinx documentation.
+___`*.rst`___ - *reStructuredText* files used in Sphinx documentation.
 
 ***`conf.py`*** - Configuration file for Sphinx documentation program.
 
@@ -84,8 +86,9 @@ pages showing what the site would look like with a server connection.
 with the Google+ API.
 
 
+
 ## Instructions
-1. **Virtual Machine setup:** 
+1. **Virtual Machine setup:**
     - Follow the instructions [here (on Udacity.com)](https://www.udacity.com/wiki/ud088/vagrant)
 to set up the Vagrant virtual machine used in this project.
 
@@ -94,51 +97,54 @@ to set up the Vagrant virtual machine used in this project.
 From there, run `vagrant up` then `vagrant ssh` and that will bring you to the
 VM prompt. Navigate to the `/vagrant/catalog` directory in VM.
 
-3. **Database setup:** 
-    - The `database_setup.py` file contains all the code to set up the **resttest** 
+3. **Database setup:**
+    - The `database_setup.py` file contains all the code to set up the **resttest**
     database, tables and views. Run this file within the VM:
     ```ssh
     ...-trusty-32:/vagrant/catalog$ python database_setup.py
-    ``` 
+    ```
     You should see the database setup commands *echo* to the command terminal without
-    error. The default is you add a postgresql database to the VM server. If you want
-    to use local directory database with the sqlite dbapi, then change **`use_postgresql`**
-    to **`False`** inside the *database_setup.py* file before running all files.
+    error. The default is you add a postgresql database to the VM server. (There is
+    a sqlite3 dbapi option by changing the value of **`use_postgresql`** but it is
+    not thoroughly tested.)
 
 4. **Add filler data:**
     - Preset data can be added to the database by following the setup with running
     the `fake_data.py` file within the VM:
     ```ssh
     ...-trusty-32:/vagrant/catalog$ python fake_data.py
-    ``` 
-    
-3. **Run the server file:** 
-    - Run `app.py` from virtual machine prompt:
+    ```
+
+3. **Run the server file:**
+    - Run `catalog_app.py` from in the `vagrant` directory VM prompt:
 
     ```ssh
-    ...-trusty-32:/vagrant/tournament$ python app.py
-    Connected to PostgreSQL: resttest
+    ...-trusty-32:/vagrant$ python catalog_app.py
      * Running on http://0.0.0.0:8000/
      * Restarting with reloader
-    Connected to PostgreSQL: resttest
     ```
 
 6. **Navigate to `http://localhost:8000`:**
-    - The home page of website is at `http://localhost:8000` while the server (`app.py`) 
+    - The home page of website is at `http://localhost:8000` while the server (`catalog_app.py`)
 is running.
 
 8. **Website navigation**
     - The main page is a listing of restaurants. All pages will have a blue button
-    that goes back to the home page restaurant list.
-    - There is a Google+ signin button at the top-right corner of all pages which 
+    that goes back to the home page restaurant list. Blue editing buttons, shown with
+    a pencil image (Glyphicon) appear for each restaurant and each item only if
+    a user is logged in.
+    - There is a Google+ signin button at the top-right corner of all pages which
     changes to a logout button with user photo when logged in. Click this button
     to log in and log out.
     - Click on any restaurant row to view the saved items from that restaurant on another
-    page and lists them along with price, description and the user's critique of the item.
-    - Critique has three choices: A heart means it is a favorite item, thumbs up means it is
-    good and might get it again, and a thumbs down means NEVER get it again!
-    - Critiques and the ability to add/edit items and restaurants is reserved for 
-    logged in members.
+    page. The menu page displays a list including price, description and the user's critique of the item.
+    - Critique has three choices: A *heart* means it is a favorite item, *thumb up* means it is
+    good and might get it again, and a *thumb down* means NEVER get it again!
+    - Critiques and the ability to add/edit items and restaurants is reserved for
+    logged in members. Look for blue buttons with a pencil image in the item row
+    when logged in.
+    - See "Urban Burger" restaurant to see how user critiques are aggregated and
+    ordered (user critiques created in `fake_data.py`).
 
 8. **Test the application:**
     - Install the **`Flask-Testing`** package with pip in the virtual environment
@@ -148,7 +154,8 @@ is running.
     ```
     sudo pip install Flask-Testing
     ```
-    Run the test suite file called `app_test.py`.
+    Run the test suite file called `catalog_app_test.py` in the `vagrant` directory.
+
 
 
 ## References
@@ -163,6 +170,9 @@ is running.
 - [How to serialize SQLAlchemy row data](http://stackoverflow.com/questions/5022066/how-to-serialize-sqlalchemy-result-to-json)
 - [SQL multi-column composite uniqueness](http://stackoverflow.com/a/10061143/1172891)
 - [How to get Sphinx documentation to load resources properly on Github pages](http://stackoverflow.com/a/24088631/1172891)
+- [How to expire a cookie](http://stackoverflow.com/questions/14386304/flask-how-to-remove-cookies)
+- [SQLAlchemy filter match any in set](http://stackoverflow.com/questions/15267755/query-for-multiple-values-at-once)
+
 
 ***SQLAlchemy.org***
 
