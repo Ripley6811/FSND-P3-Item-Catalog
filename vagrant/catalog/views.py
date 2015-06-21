@@ -56,9 +56,9 @@ def restaurant_view(restaurant_id):
     return render_template('menu.html', **context)
 
 
-@app.route('/new/item/<int:restaurant_id>')
+@app.route('/form/item/<int:restaurant_id>')
 @checks_authorization
-def new_item(restaurant_id):
+def item_form(restaurant_id):
     """Returns a **private** page for adding or editing a menu item.
 
     Redirects to restaurant list if user is not logged in.
@@ -79,9 +79,9 @@ def new_item(restaurant_id):
     return render_template('form_item.html', **context)
 
 
-@app.route('/new/restaurant')
+@app.route('/form/restaurant')
 @checks_authorization
-def new_restaurant():
+def restaurant_form():
     """Returns a **private** page for adding or editing a restaurant.
 
     Redirects to restaurant list if user is not logged in.

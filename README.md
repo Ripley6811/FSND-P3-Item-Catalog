@@ -17,18 +17,20 @@ for helping people remember what was good or bad at various restaurants. It also
 features a randomized recommendation system using a person's favorite in case they
 need help deciding where to go eat.
 
-It was built using the Flask microframework connected to a PostgreSQL database, 
-the KnockoutJS MVVM for a dynamic front-end, and Google+ third-party login
-system (OAuth2).
+Built with:
 
-Grunt-Readme was used to generate the README from templates. Sphinx for 
-creating the project and API documentation website.
+- **Flask** microframework connected to a **PostgreSQL** database
+- **KnockoutJS** MVVM for a dynamic front-end
+- **OAuth2** Google+ third-party login
+- **Grunt-Readme** to generate the README from templates
+- **Sphinx** for creating the project and API documentation website
 
 Author: Jay W Johnson
 
 [Link to GitHub repository](https://github.com/Ripley6811/FSND-P3-Item-Catalog)
 
-[App and API Documentation](http://ripley6811.github.io/FSND-P3-Item-Catalog/vagrant/sphinx_build/html/index.html)
+[Link to Documentation](http://ripley6811.github.io/FSND-P3-Item-Catalog/vagrant/sphinx_build/html/index.html)
+
 
 
 ## Required Packages
@@ -62,7 +64,7 @@ and a method for getting a connection (`get_database_session()`).
 
 ***`catalog/fake_data.py`*** - Run this file to fill the database with fictional sample data.
 
-***`static/js/ajax.js`*** - Contains a javascript method that simplifies a POST request.
+***`static/js/ajaj.js`*** - Contains a javascript method that simplifies HTTP requests.
 
 ***`static/js/signin.js`*** - Contains a javascript method for the google signin button.
 

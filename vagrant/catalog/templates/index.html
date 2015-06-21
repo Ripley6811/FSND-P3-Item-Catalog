@@ -7,7 +7,7 @@
             <h1>Restaurant List</h1>
         </div>
         <div class="col-md-7 h1" data-bind="visible: user.username">
-            <a role="button" class="btn btn-primary" href="{{ url_for('new_restaurant') }}">Add New Restaurant</a>
+            <a role="button" class="btn btn-primary" href="{{ url_for('restaurant_form') }}">Add New Restaurant</a>
             <a role="button" class="btn btn-danger" href="{{ url_for('random_favorites') }}">Random Favorite!</a>
         </div>
     </div>
@@ -54,7 +54,7 @@ view_model.get_restaurants();
  * Go to restaurant edit page.
  */
 view_model.edit = function(restaurant) {
-    window.location = "{{ url_for('new_restaurant') }}?id=" + restaurant.id;
+    window.location = "{{ url_for('restaurant_form') }}?id=" + restaurant.id;
 };
 </script>
 {% endblock %}

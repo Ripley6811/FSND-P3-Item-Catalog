@@ -302,7 +302,8 @@ def delete_item():
     """
     if 'id' not in request.get_json():
         return abort(400)
-    assert(isinstance(request.get_json()['id'], int))
+    if not isinstance(request.get_json()['id'], int):
+        return abort(400)
     try:
         record = app.q_MenuItem().get(request.get_json()['id'])
         app.db_session.delete(record)
@@ -322,7 +323,8 @@ def delete_restaurant():
     """
     if 'id' not in request.get_json():
         return abort(400)
-    assert(isinstance(request.get_json()['id'], int))
+    if not isinstance(request.get_json()['id'], int):
+        return abort(400)
     try:
         record = app.q_Restaurant().get(request.get_json()['id'])
         app.db_session.delete(record)

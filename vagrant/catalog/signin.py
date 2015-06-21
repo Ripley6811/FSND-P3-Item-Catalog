@@ -118,7 +118,7 @@ def _csrf():
     Creates a new *csrf* code and saves it in the *login_session*, then
     returns the code.
 
-    :Returns: A csrf code as a 32-character string.
+    :Returns: A 32-character string csrf code.
     """
     login_session['_csrf'] = uuid.uuid4().hex.upper()
     return login_session['_csrf']

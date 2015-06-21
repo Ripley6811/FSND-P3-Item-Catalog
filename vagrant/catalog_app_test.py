@@ -42,20 +42,20 @@ class TestNoLoginPageLoadingAndRedirect(MyTestCase):
         self.assertRedirects(response, '/')
 
     def test_add_restaurant(self):
-        response = self.client.get('/new/restaurant')
+        response = self.client.get('/form/restaurant')
         self.assertRedirects(response, '/')
 
     def test_add_menu_item(self):
-        response = self.client.get('/new/item/1')
+        response = self.client.get('/form/item/1')
         self.assertRedirects(response, '/')
 
 
-class TestJSONResponse(MyTestCase):
-
-    def test_some_json(self):
-        response = self.client.get("/api/environment")
-        self.assertIsInstance(response.json, dict)
-        self.assertIn('installed_packages', response.json)
+#class TestJSONResponse(MyTestCase):
+#
+#    def test_some_json(self):
+#        response = self.client.get("/environment")
+#        self.assertIsInstance(response.json, dict)
+#        self.assertIn('installed_packages', response.json)
 
 
 class TestNoLoginResponses(MyTestCase):
@@ -75,13 +75,13 @@ class TestNoLoginResponses(MyTestCase):
 
     def test_add_restaurant_without_login(self):
         # Insert record must return status 401 if not logged in.
-        response = self.client.post('/restaurants',
+        response = self.client.put('/restaurants',
                                     data=json.dumps(self.r_data),
                                     content_type='application/json')
         self.assert401(response, 'Save restaurant data post error')
 
     def test_add_menu_item_without_login(self):
-        response = self.client.post('/items',
+        response = self.client.put('/items',
                                     data=json.dumps(self.mi_baddata),
                                     content_type='application/json')
         self.assert401(response, 'Did not return 401')
